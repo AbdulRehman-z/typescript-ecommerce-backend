@@ -8,6 +8,7 @@ export class Password {
 
   static genPasswordHash(password: string) {
     const salt = crypto.randomBytes(32).toString("hex");
+    console.log("password:", password);
 
     const genHash = crypto
       .pbkdf2Sync(password, salt, 10000, 64, "sha512")

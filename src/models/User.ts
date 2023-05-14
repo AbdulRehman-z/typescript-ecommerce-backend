@@ -5,12 +5,14 @@ interface UserAttrs {
   username: string;
   email: string;
   password: string;
+  isAdmin: boolean;
 }
 
 interface UserDoc extends mongoose.Document {
   username: string;
   email: string;
   password: string;
+  isAdmin: boolean;
 }
 
 interface UserModel extends mongoose.Model<UserDoc> {
@@ -31,7 +33,12 @@ const UserSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    isAdmin: {
+      type: Boolean,
+      default: false,
+    },
   },
+
   {
     timestamps: true,
     toJSON: {
@@ -50,13 +57,12 @@ UserSchema.statics.build = (attrs: UserAttrs) => {
 };
 
 UserSchema.pre("save", async function (done) {
-  if (this.isModified(this.password)) {
+  if (this.isModified("password")) {
     const hashed = Password.genPasswordHash(this.get("password"));
     this.set("password", hashed);
   }
   done();
 });
-
 const User = mongoose.model<UserDoc, UserModel>("User", UserSchema);
 
 export { User };
