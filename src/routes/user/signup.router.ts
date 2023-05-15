@@ -21,8 +21,11 @@ router.post(
   validateRequest,
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { username, email, password, isAdmin } = req.body;
+      let { username, email, password, isAdmin } = req.body;
 
+      if (process.env.ADMIN_EMAIL === email) {
+        isAdmin = true;
+      }
       // check if user already exists or not
       const user = await User.findOne({ email });
       if (user) {
@@ -46,8 +49,6 @@ router.post(
           expiresIn: "14day",
         }
       );
-
-      console.log("jwtToken:", jwtToken);
 
       // attach the newly signed jwt token to session object
       req.session = {

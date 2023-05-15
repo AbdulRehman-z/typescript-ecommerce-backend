@@ -32,10 +32,6 @@ router.post(
     try {
       const { email, password } = req.body;
 
-      if (req.currentUser) {
-        throw new BadRequestError("You are already signed in!");
-      }
-
       // check if user is registered or not
       const user = await User.findOne({ email });
       if (!user) {
