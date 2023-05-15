@@ -11,7 +11,7 @@ export class Password {
     console.log("password:", password);
 
     const genHash = crypto
-      .pbkdf2Sync(password, salt, 10000, 64, "sha512")
+      .pbkdf2Sync(password, salt, 10000, 64, "sha256")
       .toString("hex");
 
     return `${genHash}.${salt}`;
@@ -26,7 +26,7 @@ export class Password {
     const [hashedPassword, salt] = storedPassword.split(".");
 
     const hashVerify = crypto
-      .pbkdf2Sync(password, salt, 10000, 64, "sha512")
+      .pbkdf2Sync(password, salt, 10000, 64, "sha256")
       .toString("hex");
 
     return hashVerify === hashedPassword;
