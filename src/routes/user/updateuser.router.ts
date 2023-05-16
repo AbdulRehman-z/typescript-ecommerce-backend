@@ -4,7 +4,7 @@ import { Password } from "../../services/password.service";
 import {
   NotAuthorizedError,
   NotFoundError,
-  validateRequest,
+  validateRequestMiddleware,
   requireAuthMiddleware,
 } from "../../common/src";
 import { body } from "express-validator";
@@ -20,7 +20,7 @@ router.put(
       .isLength({ min: 4, max: 20 })
       .withMessage("Password must be between 4 and 20 characters"),
   ],
-  validateRequest,
+  validateRequestMiddleware,
   requireAuthMiddleware,
 
   async (req: Request, res: Response) => {

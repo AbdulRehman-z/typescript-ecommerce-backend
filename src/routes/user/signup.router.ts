@@ -1,6 +1,6 @@
 import express, { NextFunction, Request, Response } from "express";
 import { User } from "../../models/User";
-import { BadRequestError, validateRequest } from "../../common/src";
+import { BadRequestError, validateRequestMiddleware } from "../../common/src";
 import jwt from "jsonwebtoken";
 import { body } from "express-validator";
 import dotenv from "dotenv";
@@ -18,7 +18,7 @@ router.post(
       .isLength({ min: 4, max: 20 })
       .withMessage("Password must be between 4 and 20 characters"),
   ],
-  validateRequest,
+  validateRequestMiddleware,
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       let { username, email, password, isAdmin } = req.body;

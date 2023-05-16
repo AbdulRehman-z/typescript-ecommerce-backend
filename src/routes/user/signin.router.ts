@@ -3,7 +3,7 @@ import { User } from "../../models/User";
 import {
   NotFoundError,
   NotAuthorizedError,
-  validateRequest,
+  validateRequestMiddleware,
   currentUserMiddleware,
   BadRequestError,
 } from "../../common/src";
@@ -26,7 +26,7 @@ router.post(
       .isLength({ min: 4, max: 20 })
       .withMessage("Password must be between 4 and 20 characters"),
   ],
-  validateRequest,
+  validateRequestMiddleware,
   currentUserMiddleware,
   async (req: Request, res: Response, next: NextFunction) => {
     try {
