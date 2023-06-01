@@ -46,6 +46,7 @@ router.post(
       if (!isPasswordValid) {
         throw new NotAuthorizedError("Invalid credientials!");
       }
+      console.log("user", user);
 
       // sign jwt
       const jwtToken = jwt.sign(

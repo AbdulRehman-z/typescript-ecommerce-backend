@@ -1,10 +1,14 @@
 import mongoose from "mongoose";
 
+interface Categories {
+  name: string;
+}
+
 interface ProductAttrs {
   title: string;
   img: string;
-  desc: string;
-  categories: Array<null>;
+  description: string;
+  categories: Categories[];
   size: string;
   color: string;
   price: string;
@@ -13,8 +17,8 @@ interface ProductAttrs {
 interface ProductDoc extends mongoose.Document {
   title: string;
   img: string;
-  desc: string;
-  categories: Array<null>;
+  description: string;
+  categories: Categories[];
   size: string;
   color: string;
   price: string;
@@ -28,7 +32,7 @@ const ProductSchema = new mongoose.Schema(
   {
     title: { type: String, required: true },
     img: { type: String, required: true },
-    desc: { type: String, required: true },
+    description: { type: String, required: true },
     categories: { type: Array },
     size: { type: String },
     color: { type: String },
@@ -50,7 +54,13 @@ ProductSchema.statics.build = (attrs: ProductAttrs) => {
   return new Product(attrs);
 };
 
+ProductSchema.index({ _id: 1 });
+// ProductSchema.clearIndexes();
+console.log(ProductSchema.indexes());
+
 const Product = mongoose.model<ProductDoc, ProductModel>(
   "Product",
   ProductSchema
 );
+
+export { Product };
