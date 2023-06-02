@@ -7,11 +7,11 @@ router.get(
   "/api/products/:category",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
+      console.log(req.params.category);
       const products = await Product.find({
-        categories: req.params.category,
-      }).limit(10);
+        color: req.params.category,
+      });
 
-      // const products = await Product.find({}).limit(10);
       res.status(200).send(products);
     } catch (error) {
       next(error);

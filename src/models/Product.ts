@@ -35,7 +35,7 @@ const ProductSchema = new mongoose.Schema(
     description: { type: String, required: true },
     categories: { type: Array },
     size: { type: String },
-    color: { type: String },
+    color: { type: String, index: true },
     price: { type: String, required: true },
   },
   {
@@ -54,7 +54,9 @@ ProductSchema.statics.build = (attrs: ProductAttrs) => {
   return new Product(attrs);
 };
 
-ProductSchema.index({ _id: 1 });
+// set category as index
+// ProductSchema.index({ categories: 1 });
+
 // ProductSchema.clearIndexes();
 console.log(ProductSchema.indexes());
 
