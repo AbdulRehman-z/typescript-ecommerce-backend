@@ -30,7 +30,7 @@ app.use(signoutUserRouter);
 ProductRoutes
 **/
 app.use(createProductRouter);
-app.use(getProductsRouter);
+// app.use(getProductsRouter);
 app.use(getProductRouter);
 app.use(getProductsByCategoryRouter);
 

@@ -55,9 +55,10 @@ router.post(
           price: faker.commerce.price(),
           img: faker.image.url(),
           description: faker.commerce.productDescription(),
-          size: faker.commerce.productAdjective(),
+          sizes: ["S", "M", "X"],
           color: "red",
-          categories: faker.commerce.department() as any,
+          gender: "male",
+          category: faker.commerce.department() as any,
         });
         await newProduct.save();
         console.log(`Product no: ${i}`);
