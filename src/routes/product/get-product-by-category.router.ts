@@ -15,6 +15,7 @@ interface Query {
     | { $gte: number };
   size?: string;
   gender?: string;
+  color?: string;
 }
 
 const router = express.Router();
@@ -73,7 +74,19 @@ router.get(
 
       console.log(query);
 
-      const products = await Product.find(query);
+      //   const products = await Product.find(query);
+
+      // aggregate query
+      const products = await Product.aggregate([
+        { $match: { price: query.price } },
+        {
+          $group: {
+            _id: { size: `$size` },
+            count: { $sum: 1 },
+          },
+        },
+      ]);
+
       //   console.log(performance.now());
       //   const products = await Product.find({
       //     color: req.params.category,
