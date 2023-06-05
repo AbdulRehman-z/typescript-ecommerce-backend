@@ -31,4 +31,13 @@ export class Password {
 
     return hashVerify === hashedPassword;
   }
+
+  // generateResetToken
+  /**
+   * This function generates a random token for the user to use to reset their password
+   */
+
+  static generateResetToken() {
+    return crypto.randomBytes(32).toString("hex");
+  }
 }

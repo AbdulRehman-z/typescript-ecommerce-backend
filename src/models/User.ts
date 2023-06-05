@@ -5,6 +5,8 @@ interface UserAttrs {
   username: string;
   email: string;
   password: string;
+  resetToken?: string;
+  resetTokenExpiration?: number;
   isAdmin: boolean;
 }
 
@@ -12,6 +14,8 @@ interface UserDoc extends mongoose.Document {
   username: string;
   email: string;
   password: string;
+  resetToken?: string;
+  resetTokenExpiration?: number;
   isAdmin: boolean;
 }
 
@@ -28,10 +32,19 @@ const UserSchema = new mongoose.Schema(
     email: {
       type: String,
       required: true,
+      index: true,
     },
     password: {
       type: String,
       required: true,
+    },
+    resetToken: {
+      type: String,
+      index: true,
+    },
+    resetTokenExpiration: {
+      type: Number,
+      index: true,
     },
     isAdmin: {
       type: Boolean,
