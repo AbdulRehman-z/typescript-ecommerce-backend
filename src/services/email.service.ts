@@ -1,32 +1,28 @@
-// Create a transporter for sending emails
-const transporter = nodemailer.createTransport({
-  service: "your_email_service_provider",
-  auth: {
-    user: "your_email_address",
-    pass: "your_email_password",
-  },
-});
+import * as dotenv from "dotenv";
+dotenv.config();
+import nodemailer from "nodemailer";
 
-// Generate a reset token
-const generateResetToken = async () => {
-  return new Promise((resolve, reject) => {
-    crypto.randomBytes(20, (err, buffer) => {
-      if (err) {
-        reject(err);
-      } else {
-        const token = buffer.toString("hex");
-        resolve(token);
-      }
-    });
-  });
-};
+console.log(process.env.ADMIN_EMAIL);
+console.log(process.env.PASS);
 
 // Send reset email
-const sendResetEmail = async (email, resetToken) => {
+export const sendResetEmail = async (email: string, resetToken: string) => {
   try {
     // Compose the email
+
+    // Create a transporter for sending emails
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.ADMIN_EMAIL,
+        pass: process.env.PASS,
+      },
+    });
+
+    console.log(process.env.ADMIN_EMAIL);
+    console.log(process.env.PASS);
     const mailOptions = {
-      from: "your_email_address",
+      from: process.env.ADMIN_EMAIL,
       to: email,
       subject: "Password Reset",
       text: `Click the following link to reset your password: ${resetToken}`,
@@ -36,7 +32,7 @@ const sendResetEmail = async (email, resetToken) => {
     const result = await transporter.sendMail(mailOptions);
     console.log("Reset email sent:", result);
   } catch (error) {
-    console.error("Error sending reset email:", error);
+    throw new Error("Error sending reset email");
     // Handle error and provide appropriate feedback to the user
   }
 };

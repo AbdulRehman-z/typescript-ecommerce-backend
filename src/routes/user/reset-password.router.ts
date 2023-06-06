@@ -1,13 +1,16 @@
 import express, { NextFunction, Request, Response } from "express";
 import { User } from "../../models/User";
 import { Password } from "../../services/password.service";
-import { BadRequestError } from "../../common/src";
+import { BadRequestError, validateRequestMiddleware } from "../../common/src";
+import { body } from "express-validator";
 
 const router = express.Router();
 
 // Route for resetting password with the token
 router.post(
-  "/reset-password/:token",
+  "/api/users/reset-password/:token",
+  [body("password").not().isEmpty().withMessage("Password is required")],
+  validateRequestMiddleware,
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { token } = req.params;
@@ -37,3 +40,5 @@ router.post(
     }
   }
 );
+
+export { router as resetPasswordRouter };

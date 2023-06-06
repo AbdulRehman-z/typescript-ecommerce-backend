@@ -11,6 +11,8 @@ import { createProductRouter } from "./routes/product/create-product.router";
 import { getProductsRouter } from "./routes/product/get-products.router";
 import { getProductRouter } from "./routes/product/get-product.router";
 import { getProductsByCategoryRouter } from "./routes/product/get-product-by-category.router";
+import { resetPasswordRouter } from "./routes/user/reset-password.router";
+import { forgotPasswordRouter } from "./routes/user/forget-password.route";
 dotenv.config();
 
 const app = express();
@@ -25,6 +27,8 @@ app.use(signupRouter);
 app.use(currentuserRouter);
 app.use(updateUserRouter);
 app.use(signoutUserRouter);
+app.use(resetPasswordRouter);
+app.use(forgotPasswordRouter);
 
 /*
 ProductRoutes
