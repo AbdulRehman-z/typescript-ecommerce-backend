@@ -1,5 +1,12 @@
 import mongoose from "mongoose";
 
+interface FlashSale {
+  active: boolean;
+  discount: number;
+  startDate: Date;
+  endDate: Date;
+}
+
 interface ProductAttrs {
   title: string;
   img: string;
@@ -9,6 +16,8 @@ interface ProductAttrs {
   gender: string;
   color: string;
   price: string;
+  stock: number;
+  flashSale: FlashSale;
 }
 
 interface ProductDoc extends mongoose.Document {
@@ -20,6 +29,8 @@ interface ProductDoc extends mongoose.Document {
   gender: string;
   color: string;
   price: string;
+  stock: number;
+  flashSale: FlashSale;
 }
 
 interface ProductModel extends mongoose.Model<ProductDoc> {
@@ -39,6 +50,13 @@ const ProductSchema = new mongoose.Schema(
     gender: { type: String },
     color: { type: String },
     price: { type: String, required: true, index: true },
+    stock: { type: Number, default: 1 },
+    flashSale: {
+      active: { type: Boolean, default: false },
+      discount: { type: Number, default: 0 },
+      startDate: { type: Date },
+      endDate: { type: Date },
+    },
   },
   {
     timestamps: true,

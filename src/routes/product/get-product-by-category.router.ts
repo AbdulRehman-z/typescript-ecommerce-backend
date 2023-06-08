@@ -69,9 +69,15 @@ router.get(
         }
       }
 
-      console.log(query);
-
-      const products = await Product.find(query);
+      const products = await Product.find(query, {
+        description: 1,
+        price: 1,
+        title: 1,
+        __id: 1,
+        category: 1,
+        sizes: 1,
+        color: 1,
+      });
       //   console.log(performance.now());
       //   const products = await Product.find({
       //     color: req.params.category,

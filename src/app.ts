@@ -2,7 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import { errorHandlerMiddleware } from "./common/src";
 import cookieSession from "cookie-session";
-import { signinRouter } from "./routes/user/signin.router";
+import { loginRouter } from "./routes/user/login.router";
 import { signupRouter } from "./routes/user/signup.router";
 import { currentuserRouter } from "./routes/user/currentuser.router";
 import { updateUserRouter } from "./routes/user/updateuser.router";
@@ -22,7 +22,7 @@ app.use(cookieSession({ signed: false, secure: false }));
 /*
 UserRoutes
 **/
-app.use(signinRouter);
+app.use(loginRouter);
 app.use(signupRouter);
 app.use(currentuserRouter);
 app.use(updateUserRouter);
@@ -34,7 +34,7 @@ app.use(forgotPasswordRouter);
 ProductRoutes
 **/
 app.use(createProductRouter);
-// app.use(getProductsRouter);
+app.use(getProductsRouter);
 app.use(getProductRouter);
 app.use(getProductsByCategoryRouter);
 

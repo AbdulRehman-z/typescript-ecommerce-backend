@@ -14,11 +14,13 @@ router.post(
   [body("email").isEmail().withMessage("Please provide a valid email")],
   validateRequestMiddleware,
   async (req: Request, res: Response, next: NextFunction) => {
+    let user;
+
     try {
       const { email } = req.body;
 
       // Find the user by email
-      const user = await User.findOne({ email });
+      user = await User.findOne({ email });
 
       if (!user) {
         // User not found
@@ -38,6 +40,13 @@ router.post(
 
       res.status(200).json({ message: "Reset email sent" });
     } catch (error) {
+      // revert the changes made to user doc if email sending fails for some reason
+      if (user) {
+        user.resetToken = undefined;
+        user.resetTokenExpiration = undefined;
+        user.save();
+      }
+
       next(error);
     }
   }

@@ -21,7 +21,7 @@ router.post(
   validateRequestMiddleware,
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      let { username, email, password, isAdmin } = req.body;
+      let { username, email, password, isAdmin, gender } = req.body;
 
       if (process.env.ADMIN_EMAIL === email) {
         isAdmin = true;
@@ -35,7 +35,13 @@ router.post(
       }
 
       // save the user in the db
-      const newUser = User.build({ username, email, password, isAdmin });
+      const newUser = User.build({
+        username,
+        email,
+        password,
+        isAdmin,
+        gender,
+      });
       await newUser.save();
 
       // sign jwt

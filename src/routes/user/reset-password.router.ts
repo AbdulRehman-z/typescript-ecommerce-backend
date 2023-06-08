@@ -7,7 +7,7 @@ import { body } from "express-validator";
 const router = express.Router();
 
 // Route for resetting password with the token
-router.post(
+router.put(
   "/api/users/reset-password/:token",
   [body("password").not().isEmpty().withMessage("Password is required")],
   validateRequestMiddleware,

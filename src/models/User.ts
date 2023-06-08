@@ -8,6 +8,7 @@ interface UserAttrs {
   resetToken?: string;
   resetTokenExpiration?: number;
   isAdmin: boolean;
+  gender: string;
 }
 
 interface UserDoc extends mongoose.Document {
@@ -17,6 +18,7 @@ interface UserDoc extends mongoose.Document {
   resetToken?: string;
   resetTokenExpiration?: number;
   isAdmin: boolean;
+  gender: string;
 }
 
 interface UserModel extends mongoose.Model<UserDoc> {
@@ -45,6 +47,9 @@ const UserSchema = new mongoose.Schema(
     resetTokenExpiration: {
       type: Number,
       index: true,
+    },
+    gender: {
+      type: String,
     },
     isAdmin: {
       type: Boolean,

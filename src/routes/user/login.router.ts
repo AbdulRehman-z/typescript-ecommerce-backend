@@ -18,7 +18,7 @@ dotenv.config();
 const router = express.Router();
 
 router.post(
-  "/api/users/signin",
+  "/api/users/login",
   [
     body("email").isEmail().withMessage("Please provide a valid email"),
     body("password")
@@ -35,7 +35,7 @@ router.post(
       // check if user is registered or not
       const user = await User.findOne({ email });
       if (!user) {
-        throw new NotFoundError("You are not registered! Try signin first.");
+        throw new NotFoundError("You are not registered! Try to signup first.");
       }
 
       // validate password
@@ -74,4 +74,4 @@ router.post(
   }
 );
 
-export { router as signinRouter };
+export { router as loginRouter };

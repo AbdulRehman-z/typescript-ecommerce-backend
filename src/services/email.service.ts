@@ -2,13 +2,10 @@ import * as dotenv from "dotenv";
 dotenv.config();
 import nodemailer from "nodemailer";
 
-console.log(process.env.ADMIN_EMAIL);
-console.log(process.env.PASS);
-
 // Send reset email
 export const sendResetEmail = async (email: string, resetToken: string) => {
   try {
-    // Compose the email
+    const resetLink = `http://localhost:5000/reset-password/${resetToken}`;
 
     // Create a transporter for sending emails
     const transporter = nodemailer.createTransport({
@@ -19,13 +16,12 @@ export const sendResetEmail = async (email: string, resetToken: string) => {
       },
     });
 
-    console.log(process.env.ADMIN_EMAIL);
-    console.log(process.env.PASS);
     const mailOptions = {
       from: process.env.ADMIN_EMAIL,
       to: email,
       subject: "Password Reset",
-      text: `Click the following link to reset your password: ${resetToken}`,
+      text: `You are receiving this email because you (or someone else) has requested the reset of the password for your account.\n\n`,
+      html: `<p>Click the following link to reset your password: <a href="${resetLink}">${resetLink}</a></p>`,
     };
 
     // Send the email
