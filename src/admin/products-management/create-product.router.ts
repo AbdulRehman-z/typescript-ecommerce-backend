@@ -14,7 +14,7 @@ const router = express.Router();
 
 // create product router
 router.post(
-  "/api/products/create",
+  "/api/admin/products/create",
   currentUserMiddleware,
   requireAuthMiddleware,
   [
@@ -66,17 +66,16 @@ router.post(
           flashSale: {
             active: faker.datatype.boolean(),
             discount: faker.datatype.number({
-              min: 1,
-              max: 100,
+              min: 0,
+              max: 0,
             }),
-            startDate: faker.date.future(),
-            endDate: faker.date.future(),
+            startDate: undefined,
+            endDate: undefined,
           },
         });
         await newProduct.save();
         console.log(`Product no: ${i}`);
       }
-
       // //create new product
       // const newProduct = Product.build({
       //   title,

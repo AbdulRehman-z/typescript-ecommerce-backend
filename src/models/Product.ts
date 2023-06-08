@@ -3,8 +3,8 @@ import mongoose from "mongoose";
 interface FlashSale {
   active: boolean;
   discount: number;
-  startDate: Date;
-  endDate: Date;
+  startDate: Date | undefined;
+  endDate: Date | undefined;
 }
 
 interface ProductAttrs {

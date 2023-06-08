@@ -7,7 +7,7 @@ import { signupRouter } from "./routes/user/signup.router";
 import { currentuserRouter } from "./routes/user/currentuser.router";
 import { updateUserRouter } from "./routes/user/updateuser.router";
 import { signoutUserRouter } from "./routes/user/signout.router";
-import { createProductRouter } from "./routes/product/create-product.router";
+import { createProductRouter } from "./admin/products-management/create-product.router";
 import { getProductsRouter } from "./routes/product/get-products.router";
 import { getProductRouter } from "./routes/product/get-product.router";
 import { getProductsByCategoryRouter } from "./routes/product/get-product-by-category.router";
