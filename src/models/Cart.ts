@@ -36,8 +36,7 @@ const CartSchema = new mongoose.Schema(
           type: String,
         },
         quantity: {
-          type: String,
-          default: 1,
+          type: Number,
         },
       },
     ],

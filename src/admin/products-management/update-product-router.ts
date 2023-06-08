@@ -1,30 +1,31 @@
 import express, { NextFunction, Request, Response } from "express";
 import { Product } from "../../models/Product";
+import { Q } from "vitest/dist/types-0373403c";
 
 const router = express.Router();
 
 interface Query {
-  available: boolean;
-  title: string;
-  image: string;
-  description: string;
-  category: string;
-  sizes: Array<string>;
-  gender: string;
-  color: Array<string>;
-  price: number;
-  stock: number;
-  flashSale: {
-    active: boolean;
-    discount: number;
-    startDate: Date;
-    endDate: Date;
+  available?: boolean;
+  title?: string;
+  image?: string;
+  description?: string;
+  category?: string;
+  sizes?: Array<string>;
+  gender?: string;
+  color?: Array<string>;
+  price?: number;
+  stock?: number;
+  flashSale?: {
+    active?: boolean;
+    discount?: number;
+    startDate?: Date;
+    endDate?: Date;
   };
 }
 
 // update product
 router.put(
-  "/api/products/:id",
+  "/api/products/update/:id",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const {
@@ -41,50 +42,48 @@ router.put(
         flashSale,
       } = req.body;
 
-      let query: Partial<Query> = {};
+      let query: Query = {};
 
       // check statements for what to update for a product
 
-      if (req.query.available) {
+      if (available !== undefined) {
         query.available = available;
       }
-      if (title) {
+      if (title !== undefined) {
         query.title = title;
       }
-      if (image) {
+      if (image !== undefined) {
         query.image = image;
       }
-      if (description) {
+      if (description !== undefined) {
         query.description = description;
       }
-      if (category) {
+      if (category !== undefined) {
         query.category = category;
       }
-      if (sizes) {
+      if (sizes !== undefined) {
         query.sizes = sizes;
       }
-      if (gender) {
+      if (gender !== undefined) {
         query.gender = gender;
       }
-      if (color) {
+      if (color !== undefined) {
         query.color = color;
       }
-      if (price) {
+      if (price !== undefined) {
         query.price = price;
       }
-      if (stock) {
+      if (stock !== undefined) {
         query.stock = stock;
       }
-      if (flashSale) {
+      if (flashSale !== undefined) {
         query.flashSale = flashSale;
       }
 
       console.log(query);
 
       // update product
-      const product = await Product.findByIdAndUpdate(req.params.id, query, {
-        new: true,
-      });
+      const product = await Product.findByIdAndUpdate(req.params.id, query);
 
       res.status(200).send(product);
     } catch (error) {

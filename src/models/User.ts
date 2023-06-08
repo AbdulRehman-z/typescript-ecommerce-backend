@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { mongo } from "mongoose";
 import { Password } from "../services/password.service";
 
 interface UserAttrs {
@@ -8,6 +8,15 @@ interface UserAttrs {
   resetToken?: string;
   resetTokenExpiration?: number;
   isAdmin: boolean;
+  address: {
+    street: string;
+    houseNumber?: number;
+    zipCode: number;
+    state: string;
+    country: string;
+    phoneNumber: number;
+    additionalInfo?: string;
+  };
   gender: string;
 }
 
@@ -18,6 +27,15 @@ interface UserDoc extends mongoose.Document {
   resetToken?: string;
   resetTokenExpiration?: number;
   isAdmin: boolean;
+  address: {
+    street: string;
+    houseNumber?: number;
+    zipCode: number;
+    state: string;
+    country: string;
+    phoneNumber: number;
+    additionalInfo?: string;
+  };
   gender: string;
 }
 
@@ -55,8 +73,38 @@ const UserSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    address: {
+      street: { type: String },
+      houseNumber: { type: Number },
+      zipCode: { type: Number },
+      state: { type: String },
+      country: { type: String },
+      phoneNumber: { type: Number },
+      additionalInfo: { type: Number },
+    },
+    cart: {
+      products: [
+        {
+          productId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Product",
+          },
+        },
+      ],
+    },
+    orders: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Order",
+      },
+    ],
+    wishlist: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Product",
+      },
+    ],
   },
-
   {
     timestamps: true,
     toJSON: {

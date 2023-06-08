@@ -24,7 +24,7 @@ router.put(
   requireAuthMiddleware,
 
   async (req: Request, res: Response) => {
-    const { newusername, password } = req.body;
+    const { newusername, password, gender, address } = req.body;
 
     const user = await User.findById(req.currentUser?.id);
     if (!user) {
