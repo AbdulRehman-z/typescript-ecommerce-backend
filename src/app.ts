@@ -13,6 +13,7 @@ import { getProductRouter } from "./routes/product/get-product.router";
 import { getProductsByCategoryRouter } from "./routes/product/get-product-by-category.router";
 import { resetPasswordRouter } from "./routes/user/reset-password.router";
 import { forgotPasswordRouter } from "./routes/user/forget-password.route";
+import { updateProductRouter } from "./admin/products-management/update-product-router";
 dotenv.config();
 
 const app = express();
@@ -34,6 +35,7 @@ app.use(forgotPasswordRouter);
 ProductRoutes
 **/
 app.use(createProductRouter);
+app.use(updateProductRouter);
 app.use(getProductsRouter);
 app.use(getProductRouter);
 app.use(getProductsByCategoryRouter);

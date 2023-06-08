@@ -51,12 +51,13 @@ router.post(
       // create 100000 products using fakerjs
       for (let i = 0; i < 10000; i++) {
         const newProduct = Product.build({
+          available: true,
           title: faker.commerce.productName(),
           price: faker.commerce.price(),
           img: faker.image.url(),
           description: faker.commerce.productDescription(),
           sizes: ["S", "M", "L"],
-          color: faker.color.human(),
+          color: ["red", "green", "blue", "orange", "back"],
           gender: "male",
           category: faker.commerce.department() as any,
           stock: faker.datatype.number({
@@ -64,7 +65,7 @@ router.post(
             max: 100,
           }),
           flashSale: {
-            active: faker.datatype.boolean(),
+            active: false,
             discount: faker.datatype.number({
               min: 0,
               max: 0,

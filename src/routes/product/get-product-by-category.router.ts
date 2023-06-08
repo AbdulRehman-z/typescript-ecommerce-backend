@@ -2,18 +2,18 @@ import express, { NextFunction, Request, Response } from "express";
 import { Product } from "../../models/Product";
 
 interface Query {
-  category?: string;
-  price?:
+  category: string;
+  price:
     | { $lt: number }
     | { $gt: number }
     | { $lte: number }
     | { $gte: number };
-  priceOperator?:
+  priceOperator:
     | { $lt: number }
     | { $gt: number }
     | { $lte: number }
     | { $gte: number };
-  size?: string;
+  size: string;
 }
 
 const router = express.Router();
@@ -22,7 +22,7 @@ router.get(
   "/api/products",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      let query: Query = {};
+      let query: Partial<Query> = {};
 
       /*
       HANDLE FILTERING QUERIES
