@@ -80,7 +80,7 @@ const UserSchema = new mongoose.Schema(
       state: { type: String },
       country: { type: String },
       phoneNumber: { type: Number },
-      additionalInfo: { type: Number },
+      additionalInfo: { type:String },
     },
     cart: {
       products: [

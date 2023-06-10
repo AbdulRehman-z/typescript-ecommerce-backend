@@ -17,7 +17,7 @@ interface ProductAttrs {
   gender: string;
   color: Array<string>;
   price: string;
-  stock: number;
+  AvaliableQuantity: number;
   flashSale: FlashSale;
   reservedQuantity?: number;
 }
@@ -32,7 +32,7 @@ interface ProductDoc extends mongoose.Document {
   gender: string;
   color: Array<string>;
   price: string;
-  stock: number;
+  AvaliableQuantity: number;
   flashSale: FlashSale;
   reservedQuantity?: number;
 }
@@ -55,7 +55,8 @@ const ProductSchema = new mongoose.Schema(
     gender: { type: String },
     color: { type: Array },
     price: { type: String, required: true, index: true },
-    stock: { type: Number, default: 1 },
+    inStock: { type: Number, default: 1 },
+    AvaliableQuantity: { type: Number, required: true },
     flashSale: {
       active: { type: Boolean, default: false },
       discount: { type: Number, default: 0 },

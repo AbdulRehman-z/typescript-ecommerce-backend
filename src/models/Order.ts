@@ -1,5 +1,15 @@
 import mongoose from "mongoose";
 
+enum OrderStatus {
+  Pending = "pending",
+  Processing = "processing",
+  Shipped = "shipped",
+  Delivered = "delivered",
+  Cancelled = "cancelled",
+  Returned = "returned",
+  Refunded = "refunded",
+}
+
 interface OrderAttrs {
   userId: string;
   products: [
@@ -10,7 +20,7 @@ interface OrderAttrs {
   ];
   amount: number;
   address: Object;
-  status: string;
+  status: OrderStatus;
 }
 
 interface OrderDoc extends mongoose.Document {
@@ -23,7 +33,7 @@ interface OrderDoc extends mongoose.Document {
   ];
   amount: number;
   address: Object;
-  status: string;
+  status: OrderStatus;
 }
 
 interface OrderModel extends mongoose.Model<OrderDoc> {
@@ -58,6 +68,7 @@ const OrderSchema = new mongoose.Schema(
     status: {
       type: String,
       default: "pending",
+      enum: Object.values(OrderStatus),
     },
   },
   {
