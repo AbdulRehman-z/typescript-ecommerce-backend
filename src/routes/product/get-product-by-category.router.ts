@@ -14,12 +14,13 @@ interface Query {
     | { $lte: number }
     | { $gte: number };
   size: string;
+  gender: string;
 }
 
 const router = express.Router();
 
 router.get(
-  "/api/products",
+  "/api/products/params",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       let query: Partial<Query> = {};
@@ -36,7 +37,8 @@ router.get(
 
       // Handle gender filtering queries
       if (req.query.gender) {
-        const gender = String(req.query.gender);
+        const gender = req.query.gender;
+        query.gender = String(gender);
       }
 
       // Handle category filtering queries
@@ -78,13 +80,6 @@ router.get(
         sizes: 1,
         color: 1,
       });
-      //   console.log(performance.now());
-      //   const products = await Product.find({
-      //     color: req.params.category,
-      //   });
-      //   console.log(performance.now());
-
-      //   console.log(products.length);
 
       res.status(200).send(products);
     } catch (error) {

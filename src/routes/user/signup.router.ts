@@ -71,24 +71,3 @@ router.post(
 );
 
 export { router as signupRouter };
-
-// // create 3000 users using fakerjs
-//     for (let i = 0; i < 3000; i++) {
-//       const user = User.build({
-//         username: faker.internet.userName(),
-//         email: faker.internet.email(),
-//         password: faker.internet.password(),
-//         isAdmin: false,
-//         gender: faker.person.sex(),
-//         address: {
-//           street: faker.location.streetAddress(),
-//           houseNumber: faker.number.int(),
-//           state: faker.location.state(),
-//           zipCode: parseInt(faker.location.zipCode()),
-//           country: faker.location.country(),
-//           phoneNumber: parseInt(faker.phone.number("+92 31 ### ## ## ")),
-//           additionalInfo: faker.location.secondaryAddress(),
-//         },
-//       });
-//       await user.save();
-//     }
