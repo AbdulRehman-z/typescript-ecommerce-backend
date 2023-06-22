@@ -20,6 +20,7 @@ interface ProductAttrs {
   AvaliableQuantity: number;
   flashSale: FlashSale;
   reservedQuantity?: number;
+  ratings: Array<number>;
 }
 
 interface ProductDoc extends mongoose.Document {
@@ -35,6 +36,7 @@ interface ProductDoc extends mongoose.Document {
   AvaliableQuantity: number;
   flashSale: FlashSale;
   reservedQuantity?: number;
+  ratings: Array<number>;
 }
 
 interface ProductModel extends mongoose.Model<ProductDoc> {
@@ -64,6 +66,10 @@ const ProductSchema = new mongoose.Schema(
       endDate: { type: Date, default: undefined },
     },
     reservedQuantity: { type: Number, default: 0 },
+    ratings: {
+      type: Array,
+      default: [],
+    },
   },
   {
     timestamps: true,

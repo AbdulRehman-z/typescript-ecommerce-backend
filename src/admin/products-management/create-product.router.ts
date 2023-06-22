@@ -6,7 +6,7 @@ import {
   requireAuthMiddleware,
   validateRequestMiddleware,
 } from "../../common/src";
-import { faker } from "@faker-js/faker";
+import { fa, faker } from "@faker-js/faker";
 import { body } from "express-validator";
 import { Product } from "../../models/Product";
 
@@ -48,6 +48,14 @@ router.post(
       //   throw new BadRequestError("Product already exists");
       // }
 
+      // random array of 60 numbers between 1 and 5
+      const ratings = Array.from({ length: 60 }, () =>
+        faker.datatype.number({
+          min: 1,
+          max: 5,
+        })
+      );
+
       // create 100000 products using fakerjs
       for (let i = 0; i < 10000; i++) {
         const newProduct = Product.build({
@@ -60,7 +68,7 @@ router.post(
           color: ["red", "green", "blue", "orange", "back"],
           gender: "male",
           category: faker.commerce.department() as any,
-          stock: faker.datatype.number({
+          AvaliableQuantity: faker.datatype.number({
             min: 1,
             max: 100,
           }),
@@ -73,6 +81,7 @@ router.post(
             startDate: undefined,
             endDate: undefined,
           },
+          ratings: ratings,
         });
         await newProduct.save();
         console.log(`Product no: ${i}`);
