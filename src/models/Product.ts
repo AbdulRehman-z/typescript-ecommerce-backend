@@ -8,19 +8,20 @@ interface FlashSale {
 }
 
 interface ProductAttrs {
-  available: boolean;
+  available?: boolean;
   title: string;
   img: string;
   description: string;
   category: string;
   sizes: Array<string>;
   gender: string;
+  inStock: number;
   color: Array<string>;
   price: string;
-  AvaliableQuantity: number;
+  avaliableQuantity: number;
   flashSale: FlashSale;
   reservedQuantity?: number;
-  ratings: Array<number>;
+  rating?: Array<number>;
 }
 
 interface ProductDoc extends mongoose.Document {
@@ -32,11 +33,12 @@ interface ProductDoc extends mongoose.Document {
   sizes: Array<string>;
   gender: string;
   color: Array<string>;
+  inStock: number;
   price: string;
-  AvaliableQuantity: number;
+  avaliableQuantity: number;
   flashSale: FlashSale;
   reservedQuantity?: number;
-  ratings: Array<number>;
+  rating: Array<number>;
 }
 
 interface ProductModel extends mongoose.Model<ProductDoc> {
@@ -58,7 +60,7 @@ const ProductSchema = new mongoose.Schema(
     color: { type: Array },
     price: { type: String, required: true, index: true },
     inStock: { type: Number, default: 1 },
-    AvaliableQuantity: { type: Number, required: true },
+    avaliableQuantity: { type: Number, required: true },
     flashSale: {
       active: { type: Boolean, default: false },
       discount: { type: Number, default: 0 },
