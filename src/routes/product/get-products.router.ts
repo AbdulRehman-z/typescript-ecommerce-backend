@@ -55,8 +55,8 @@ router.get("/", async (req: Request, res: Response, next: NextFunction) => {
           title: 1,
           img: 1,
           price: 1,
-          ratings: {
-            $avg: "$ratings",
+          rating: {
+            $avg: "$rating",
           },
         },
       },

@@ -68,7 +68,7 @@ const ProductSchema = new mongoose.Schema(
       endDate: { type: Date, default: undefined },
     },
     reservedQuantity: { type: Number, default: 0 },
-    ratings: {
+    rating: {
       type: Array,
       default: [],
     },
