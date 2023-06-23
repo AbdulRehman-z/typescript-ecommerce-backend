@@ -38,86 +38,44 @@ router.post(
         );
       }
 
-      // // get the product details from the request body
-      // const {
-      //   title,
-      //   price,
-      //   img,
-      //   description,
-      //   sizes,
-      //   color,
-      //   category,
-      //   avaliableQuantity,
-      //   flashSale,
-      //   gender,
-      //   inStock,
-      // } = req.body;
+      // get the product details from the request body
+      const {
+        title,
+        price,
+        img,
+        description,
+        sizes,
+        color,
+        category,
+        avaliableQuantity,
+        flashSale,
+        gender,
+        inStock,
+      } = req.body;
 
-      // // check if product already exists or not
-      // const isProductExist = await Product.findOne({ title });
-      // if (isProductExist) {
-      //   throw new BadRequestError("Product already exists");
-      // }
+      // check if product already exists or not
+      const isProductExist = await Product.findOne({ title });
+      if (isProductExist) {
+        throw new BadRequestError("Product already exists");
+      }
 
-      // // //create new product
-      // const newProduct = Product.build({
-      //   title,
-      //   price,
-      //   img,
-      //   category,
-      //   description,
-      //   sizes,
-      //   color,
-      //   avaliableQuantity,
-      //   flashSale,
-      //   gender,
-      //   inStock,
-      // });
+      // //create new product
+      const newProduct = Product.build({
+        title,
+        price,
+        img,
+        category,
+        description,
+        sizes,
+        color,
+        avaliableQuantity,
+        flashSale,
+        gender,
+        inStock,
+      });
 
       // save the product in the db
-      // await newProduct.save();
-
-      // create 100000 products using fakerjs
-      for (let i = 0; i < 2000; i++) {
-        // random array of 60 numbers between 1 and 5
-        const ratings = Array.from({ length: 60 }, () =>
-          faker.datatype.number({
-            min: 1,
-            max: 5,
-          })
-        );
-        const newProduct = Product.build({
-          available: true,
-          title: faker.commerce.productName(),
-          price: faker.commerce.price(),
-          img: faker.image.url(),
-          description: faker.commerce.productDescription(),
-          sizes: ["S", "M", "L"],
-          color: ["red", "green", "blue", "orange", "back"],
-          gender: "male",
-          inStock: faker.datatype.number({
-            min: 1,
-            max: 100,
-          }),
-          category: faker.commerce.department() as any,
-          avaliableQuantity: faker.datatype.number({
-            min: 1,
-            max: 100,
-          }),
-          flashSale: {
-            active: false,
-            discount: faker.datatype.number({
-              min: 0,
-              max: 0,
-            }),
-            startDate: undefined,
-            endDate: undefined,
-          },
-          rating: ratings,
-        });
-        await newProduct.save();
-        console.log(`Product no: ${i}`);
-      }
+      await newProduct.save();
 
       res.status(201).json({ message: "Product created successfully" });
     } catch (error) {
@@ -127,3 +85,45 @@ router.post(
 );
 
 export { router as createProductRouter };
+
+// // create 100000 products using fakerjs
+// for (let i = 0; i < 2000; i++) {
+//   // random array of 60 numbers between 1 and 5
+//   const ratings = Array.from({ length: 60 }, () =>
+//     faker.datatype.number({
+//       min: 1,
+//       max: 5,
+//     })
+//   );
+//   const newProduct = Product.build({
+//     available: true,
+//     title: faker.commerce.productName(),
+//     price: faker.commerce.price(),
+//     img: faker.image.url(),
+//     description: faker.commerce.productDescription(),
+//     sizes: ["S", "M", "L"],
+//     color: ["red", "green", "blue", "orange", "back"],
+//     gender: "male",
+//     inStock: faker.datatype.number({
+//       min: 1,
+//       max: 100,
+//     }),
+//     category: faker.commerce.department() as any,
+//     avaliableQuantity: faker.datatype.number({
+//       min: 1,
+//       max: 100,
+//     }),
+//     flashSale: {
+//       active: false,
+//       discount: faker.datatype.number({
+//         min: 0,
+//         max: 0,
+//       }),
+//       startDate: undefined,
+//       endDate: undefined,
+//     },
+//     rating: ratings,
+//   });
+//   await newProduct.save();
+//   console.log(`Product no: ${i}`);
+// }
