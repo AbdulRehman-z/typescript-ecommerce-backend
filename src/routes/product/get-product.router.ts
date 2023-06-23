@@ -7,8 +7,8 @@ router.get(
   "/api/product/:id",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const product = await Product.findOne({ id: req.params.id });
-      res.status(200).send(product);
+      const product = await Product.findById({ _id: req.params.id });
+      res.status(200).json(product);
     } catch (error) {
       next(error);
     }
