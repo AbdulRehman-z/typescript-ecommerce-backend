@@ -8,6 +8,7 @@ import {
 import { Product } from "../../models/Product";
 import { Cart, CartAttrs } from "../../models/Cart";
 import { User } from "../../models/User";
+import mongoose from "mongoose";
 
 const router = exprees.Router();
 
@@ -63,25 +64,41 @@ router.post(
       }
 
       // now add the product to the cart
-      const cartItem: CartAttrs = {
-        userId: req.currentUser!.id,
-        products: [
-          {
-            productId: product._id,
-            quantity: quantity,
-          },
-        ],
-      };
+      const cart = await Cart.findOne({ userId: req.currentUser!.id });
 
-      const cart = Cart.build(cartItem);
-      await cart.save();
+      if (!cart) {
+        // create a new cart
+        const newCart = Cart.build({
+          userId: req.currentUser!.id,
+          products: [{ productId: product._id, quantity: quantity }],
+        });
+        await newCart.save();
+      } else if (cart) {
+        // check if product already exists in the cart, if exist, update the quantity
+        cart.products.forEach(async (el) => {
+          if (el.productId === product._id.toString()) {
+            console.log("product already exists in the cart");
+            el.quantity += quantity;
+            await cart.save();
+          } else {
+            console.log("product does not exist in the cart");
+
+            cart.set({
+              products: [
+                ...cart.products,
+                { productId: product._id, quantity },
+              ],
+            });
+            await cart.save();
+          }
+        });
+      }
 
       // now add the item to the user cart array
       const user = await User.findByIdAndUpdate(req.currentUser!.id, {
-        $push: { cart: cart._id },
+        $push: { cart: cart?._id },
       });
       await user?.save();
-      console.log("user: ", user);
 
       res.status(200).json(product);
     } catch (error) {
