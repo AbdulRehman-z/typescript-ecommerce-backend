@@ -85,31 +85,14 @@ const UserSchema = new mongoose.Schema(
       phoneNumber: { type: String },
       additionalInfo: { type: String },
     },
-    cart: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Cart",
-      },
-    ],
-    orders: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Order",
-      },
-    ],
-    wishlist: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Product",
-      },
-    ],
+    cart: [{ type: mongoose.Schema.Types.ObjectId }],
+    orders: [{ type: mongoose.Schema.Types.ObjectId }],
+    wishlist: [{ type: mongoose.Schema.Types.ObjectId }],
   },
   {
     timestamps: true,
     toJSON: {
       transform(doc, ret, options) {
-        ret.id = ret._id;
-        delete ret._id;
         delete ret.password;
         delete ret.__v;
       },

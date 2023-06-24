@@ -6,9 +6,8 @@ import {
   requireAuthMiddleware,
 } from "../../common/src";
 import { Product } from "../../models/Product";
-import { Cart, CartAttrs } from "../../models/Cart";
+import { Cart } from "../../models/Cart";
 import { User } from "../../models/User";
-import mongoose from "mongoose";
 
 const router = exprees.Router();
 
@@ -72,17 +71,37 @@ router.post(
           userId: req.currentUser!.id,
           products: [{ productId: product._id, quantity: quantity }],
         });
+
+        // now add the item to the user cart array
+        const user = await User.findById(req.currentUser!.id);
+
+        if (!user) {
+          throw new NotFoundError("User not found");
+        }
+        console.log("user: ", user);
+
+        // if cart id already exists in the user cart array, don't add it again
+        console.log(user.cart.includes(newCart._id));
+        console.log("cart id: ", newCart._id);
+        if (user.cart.includes(newCart._id)) {
+          console.log("cart id already exists in the user cart array");
+        } else {
+          user.set({
+            cart: [...user.cart, newCart._id],
+          });
+          await user.save();
+        }
+
         await newCart.save();
       } else if (cart) {
         // check if product already exists in the cart, if exist, update the quantity
         cart.products.forEach(async (el) => {
           if (el.productId === product._id.toString()) {
-            console.log("product already exists in the cart");
+            // console.log("product already exists in the cart");
             el.quantity += quantity;
             await cart.save();
           } else {
-            console.log("product does not exist in the cart");
-
+            // console.log("product does not exist in the cart");
             cart.set({
               products: [
                 ...cart.products,
@@ -93,26 +112,6 @@ router.post(
           }
         });
       }
-
-      // now add the item to the user cart array
-      const user = await User.findById(req.currentUser!.id);
-
-      if (!user) {
-        throw new NotFoundError("User not found");
-      }
-
-      // if cart id already exists in the user cart array, don't add it again
-      user.cart.forEach(async (el) => {
-        if (el === cart?._id.toString()) {
-          console.log("cart already exists in the user cart array");
-        } else {
-          console.log("cart does not exist in the user cart array");
-          user.set({
-            cart: [...user.cart, cart?._id],
-          });
-          await user.save();
-        }
-      });
 
       res.status(200).json(product);
     } catch (error) {

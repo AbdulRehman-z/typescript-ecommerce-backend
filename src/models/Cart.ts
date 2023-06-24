@@ -47,8 +47,6 @@ const CartSchema = new mongoose.Schema(
     timestamps: true,
     toJSON: {
       transform(ret) {
-        ret.id = ret._id;
-        delete ret._id;
         delete ret.__v;
       },
     },
