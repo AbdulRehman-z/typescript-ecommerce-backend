@@ -95,10 +95,24 @@ router.post(
       }
 
       // now add the item to the user cart array
-      const user = await User.findByIdAndUpdate(req.currentUser!.id, {
-        $push: { cart: cart?._id },
+      const user = await User.findById(req.currentUser!.id);
+
+      if (!user) {
+        throw new NotFoundError("User not found");
+      }
+
+      // if cart id already exists in the user cart array, don't add it again
+      user.cart.forEach(async (el) => {
+        if (el === cart?._id.toString()) {
+          console.log("cart already exists in the user cart array");
+        } else {
+          console.log("cart does not exist in the user cart array");
+          user.set({
+            cart: [...user.cart, cart?._id],
+          });
+          await user.save();
+        }
       });
-      await user?.save();
 
       res.status(200).json(product);
     } catch (error) {

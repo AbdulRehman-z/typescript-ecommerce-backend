@@ -37,6 +37,9 @@ interface UserDoc extends mongoose.Document {
     additionalInfo?: string;
   };
   gender: string;
+  cart: mongoose.Schema.Types.ObjectId[];
+  orders: mongoose.Schema.Types.ObjectId[];
+  wishlist: mongoose.Schema.Types.ObjectId[];
 }
 
 interface UserModel extends mongoose.Model<UserDoc> {
