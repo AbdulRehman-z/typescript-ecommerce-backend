@@ -6,11 +6,13 @@ import {
   requireAuthMiddleware,
 } from "../../common/src";
 import { Product } from "../../models/Product";
+import { Cart, CartAttrs } from "../../models/Cart";
+import { User } from "../../models/User";
 
 const router = exprees.Router();
 
 router.post(
-  "/api/cart/add-to-cart",
+  "/api/cart/add-item",
   currentUserMiddleware,
   requireAuthMiddleware,
   async (req: Request, res: Response, next: NextFunction) => {
@@ -36,15 +38,50 @@ router.post(
         throw new BadRequestError("Requested quantity is not available");
       }
 
+      // If quantity is less than or equal to 0, throw an error
+      if (quantity <= 0) {
+        throw new BadRequestError("Invalid quantity");
+      }
+
+      // If avaliable quantity equals to quantity, set the product available to false and update the product
+      if (quantity === product.avaliableQuantity) {
+        product.set({
+          available: false,
+          reservedQuantity: product.reservedQuantity + quantity,
+          avaliableQuantity: product.avaliableQuantity - quantity,
+        });
+        await product.save();
+      }
+
       // If product is available and the quantity is less than the avaliable quantity, update the product
-      if (quantity <= product.avaliableQuantity && product.available) {
+      if (quantity < product.avaliableQuantity && product.available) {
         product.set({
           reservedQuantity: product.reservedQuantity + quantity,
           avaliableQuantity: product.avaliableQuantity - quantity,
         });
         await product.save();
       }
-      console.log("product: ", product);
+
+      // now add the product to the cart
+      const cartItem: CartAttrs = {
+        userId: req.currentUser!.id,
+        products: [
+          {
+            productId: product._id,
+            quantity: quantity,
+          },
+        ],
+      };
+
+      const cart = Cart.build(cartItem);
+      await cart.save();
+
+      // now add the item to the user cart array
+      const user = await User.findByIdAndUpdate(req.currentUser!.id, {
+        $push: { cart: cart._id },
+      });
+      await user?.save();
+      console.log("user: ", user);
 
       res.status(200).json(product);
     } catch (error) {

@@ -14,7 +14,7 @@ import { getProductsByCategoryRouter } from "./routes/product/get-product-by-cat
 import { resetPasswordRouter } from "./routes/user/reset-password.router";
 import { forgotPasswordRouter } from "./routes/user/forget-password.route";
 import { updateProductRouter } from "./admin/products-management/update-product-router";
-import { addToCartRouter } from "./routes/cart/add-to-cart.router";
+import { addToCartRouter } from "./routes/cart/add-item-cart.router";
 dotenv.config();
 
 const app = express();

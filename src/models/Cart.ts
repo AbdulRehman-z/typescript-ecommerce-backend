@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-interface CartAttrs {
+export interface CartAttrs {
   userId: string;
   products: [
     {
@@ -60,3 +60,5 @@ CartSchema.statics.build = (attrs: CartAttrs) => {
 };
 
 const Cart = mongoose.model<CartDoc, CartModel>("Cart", CartSchema);
+
+export { Cart };

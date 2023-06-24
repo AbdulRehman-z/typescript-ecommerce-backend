@@ -5,19 +5,19 @@ interface UserAttrs {
   username: string;
   email: string;
   password: string;
+  gender: string;
   resetToken?: string;
   resetTokenExpiration?: number;
   isAdmin: boolean;
   address: {
     street: string;
     houseNumber?: number;
-    zipCode: number;
+    zipCode: string;
     state: string;
     country: string;
-    phoneNumber: number;
+    phoneNumber: string;
     additionalInfo?: string;
   };
-  gender: string;
 }
 
 interface UserDoc extends mongoose.Document {
@@ -29,11 +29,11 @@ interface UserDoc extends mongoose.Document {
   isAdmin: boolean;
   address: {
     street: string;
-    houseNumber?: number;
-    zipCode: number;
+    houseNumber?: string;
+    zipCode: string;
     state: string;
     country: string;
-    phoneNumber: number;
+    phoneNumber: string;
     additionalInfo?: string;
   };
   gender: string;
@@ -76,22 +76,18 @@ const UserSchema = new mongoose.Schema(
     address: {
       street: { type: String },
       houseNumber: { type: Number },
-      zipCode: { type: Number },
+      zipCode: { type: String },
       state: { type: String },
       country: { type: String },
-      phoneNumber: { type: Number },
-      additionalInfo: { type:String },
+      phoneNumber: { type: String },
+      additionalInfo: { type: String },
     },
-    cart: {
-      products: [
-        {
-          productId: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Product",
-          },
-        },
-      ],
-    },
+    cart: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Cart",
+      },
+    ],
     orders: [
       {
         type: mongoose.Schema.Types.ObjectId,

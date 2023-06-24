@@ -3,7 +3,7 @@ import { User } from "../../models/User";
 import { BadRequestError, validateRequestMiddleware } from "../../common/src";
 import jwt from "jsonwebtoken";
 import { body } from "express-validator";
-import { faker } from "@faker-js/faker";
+import { fa, faker } from "@faker-js/faker";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -21,6 +21,8 @@ router.post(
   ],
   validateRequestMiddleware,
   async (req: Request, res: Response, next: NextFunction) => {
+    // generate 200 random users using fakerjs
+
     try {
       let { username, email, password, isAdmin, gender, address } = req.body;
 
@@ -41,8 +43,16 @@ router.post(
         email,
         password,
         isAdmin,
-        gender,
-        address,
+        gender: faker.person.sex(),
+        address: {
+          street: faker.location.streetAddress(),
+          houseNumber: faker.number.int(),
+          zipCode: faker.location.zipCode(),
+          state: faker.location.state(),
+          country: faker.location.country(),
+          phoneNumber: faker.phone.number(),
+          additionalInfo: faker.location.secondaryAddress(),
+        },
       });
       await newUser.save();
 
