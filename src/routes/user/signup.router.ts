@@ -3,7 +3,7 @@ import { User } from "../../models/User";
 import { BadRequestError, validateRequestMiddleware } from "../../common/src";
 import jwt from "jsonwebtoken";
 import { body } from "express-validator";
-import { fa, faker } from "@faker-js/faker";
+import { faker } from "@faker-js/faker";
 import dotenv from "dotenv";
 dotenv.config();
 

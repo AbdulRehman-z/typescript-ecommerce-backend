@@ -1,6 +1,5 @@
 import express, { NextFunction, Request, Response } from "express";
 import { Product } from "../../models/Product";
-import { Q } from "vitest/dist/types-0373403c";
 
 const router = express.Router();
 
