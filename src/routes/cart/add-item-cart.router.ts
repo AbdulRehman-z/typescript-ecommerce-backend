@@ -21,7 +21,6 @@ router.post(
 
       // Find the product with the provided id
       const product = await Product.findById(productId);
-      console.log("product: ", product);
 
       // If no product found, throw an error
       if (!product) {
@@ -91,17 +90,18 @@ router.post(
           });
           await user.save();
         }
-
+        console.log("user: ", user);
         await newCart.save();
-      } else if (cart) {
+      } else if (cart.products.length > 0) {
         // check if product already exists in the cart, if exist, update the quantity
+        console.log("cart: ", cart);
         cart.products.forEach(async (el) => {
           if (el.productId === product._id.toString()) {
-            // console.log("product already exists in the cart");
+            console.log("product already exists in the cart");
             el.quantity += quantity;
             await cart.save();
           } else {
-            // console.log("product does not exist in the cart");
+            console.log("product does not exist in the cart");
             cart.set({
               products: [
                 ...cart.products,
@@ -111,6 +111,12 @@ router.post(
             await cart.save();
           }
         });
+      } else {
+        // add the product to the cart
+        cart.set({
+          products: [{ productId: product._id, quantity }],
+        });
+        await cart.save();
       }
 
       res.status(200).json(product);
