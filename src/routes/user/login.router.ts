@@ -46,13 +46,14 @@ router.post(
       if (!isPasswordValid) {
         throw new NotAuthorizedError("Invalid credientials!");
       }
-      console.log("user", user);
 
       // sign jwt
       const jwtToken = jwt.sign(
         {
           id: user.id,
           isAdmin: user.isAdmin,
+          email: user.email,
+          address: user.address,
         },
         process.env.SECRET_KEY!,
         {

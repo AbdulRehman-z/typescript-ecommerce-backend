@@ -1,9 +1,11 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
+import { Address } from "nodemailer/lib/mailer";
 
 interface UserPayload {
   id: string;
   isAdmin: boolean;
+  address: Address;
 }
 
 declare global {

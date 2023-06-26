@@ -1,6 +1,16 @@
 import mongoose, { mongo } from "mongoose";
 import { Password } from "../services/password.service";
 
+export interface Address {
+  street: string;
+  houseNumber?: number;
+  zipCode: string;
+  state: string;
+  country: string;
+  phoneNumber: string;
+  additionalInfo?: string;
+}
+
 interface UserAttrs {
   username: string;
   email: string;
@@ -9,15 +19,7 @@ interface UserAttrs {
   resetToken?: string;
   resetTokenExpiration?: number;
   isAdmin: boolean;
-  address: {
-    street: string;
-    houseNumber?: number;
-    zipCode: string;
-    state: string;
-    country: string;
-    phoneNumber: string;
-    additionalInfo?: string;
-  };
+  address: Address;
 }
 
 interface UserDoc extends mongoose.Document {
@@ -27,15 +29,7 @@ interface UserDoc extends mongoose.Document {
   resetToken?: string;
   resetTokenExpiration?: number;
   isAdmin: boolean;
-  address: {
-    street: string;
-    houseNumber?: string;
-    zipCode: string;
-    state: string;
-    country: string;
-    phoneNumber: string;
-    additionalInfo?: string;
-  };
+  address: Address;
   gender: string;
   cart: mongoose.Schema.Types.ObjectId[];
   orders: mongoose.Schema.Types.ObjectId[];

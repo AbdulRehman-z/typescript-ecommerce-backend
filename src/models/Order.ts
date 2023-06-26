@@ -12,12 +12,7 @@ enum OrderStatus {
 
 interface OrderAttrs {
   userId: string;
-  products: [
-    {
-      productId: string;
-      quantity: number;
-    }
-  ];
+  cartId: string;
   totalPrice: number;
   address: Object;
   status: OrderStatus;
@@ -25,12 +20,7 @@ interface OrderAttrs {
 
 interface OrderDoc extends mongoose.Document {
   userId: string;
-  products: [
-    {
-      productId: string;
-      quantity: number;
-    }
-  ];
+  cartId: string;
   totalPrice: number;
   address: Object;
   status: OrderStatus;
@@ -79,3 +69,5 @@ OrderSchema.statics.build = (attrs: OrderAttrs) => {
 };
 
 const Order = mongoose.model<OrderDoc, OrderModel>("Order", OrderSchema);
+
+export { Order, OrderStatus };

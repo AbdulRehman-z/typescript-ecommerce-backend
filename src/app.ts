@@ -16,6 +16,7 @@ import { forgotPasswordRouter } from "./routes/user/forget-password.route";
 import { updateProductRouter } from "./admin/products-management/update-product-router";
 import { addToCartRouter } from "./routes/cart/add-item-cart.router";
 import { deleteCartItemRouter } from "./routes/cart/delete-cart-item.router";
+import { createOrderRouter } from "./routes/order/create-order.router";
 dotenv.config();
 
 const app = express();
@@ -47,6 +48,11 @@ CartRoutes
 **/
 app.use(addToCartRouter);
 app.use(deleteCartItemRouter);
+
+/*
+OrderRoutes
+**/
+app.use(createOrderRouter);
 
 app.use(errorHandlerMiddleware);
 

@@ -61,6 +61,8 @@ router.post(
         {
           id: newUser.id,
           isAdmin: newUser.isAdmin,
+          email: newUser.email,
+          address: newUser.address,
         },
         process.env.SECRET_KEY!,
         {
