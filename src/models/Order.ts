@@ -18,7 +18,7 @@ interface OrderAttrs {
       quantity: number;
     }
   ];
-  amount: number;
+  totalPrice: number;
   address: Object;
   status: OrderStatus;
 }
@@ -31,7 +31,7 @@ interface OrderDoc extends mongoose.Document {
       quantity: number;
     }
   ];
-  amount: number;
+  totalPrice: number;
   address: Object;
   status: OrderStatus;
 }
@@ -46,18 +46,11 @@ const OrderSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    products: [
-      {
-        productId: {
-          type: String,
-        },
-        quantity: {
-          type: String,
-          default: 1,
-        },
-      },
-    ],
-    amount: {
+    cartId: {
+      type: String,
+      required: true,
+    },
+    totalPrice: {
       type: Number,
       required: true,
     },
