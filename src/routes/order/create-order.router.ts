@@ -37,8 +37,7 @@ router.post(
       );
 
       // save the order in the db
-      await order.save();
-      await updatedUser!.save();
+      await Promise.all([order.save(), updatedUser?.save()]);
 
       res.status(201).send(order);
     } catch (error) {
