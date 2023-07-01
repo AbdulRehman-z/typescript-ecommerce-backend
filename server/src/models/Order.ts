@@ -18,7 +18,7 @@ interface OrderAttrs {
   status: OrderStatus;
 }
 
-interface OrderDoc extends mongoose.Document {
+export interface OrderDoc extends mongoose.Document {
   userId: string;
   cartId: string;
   totalPrice: number;

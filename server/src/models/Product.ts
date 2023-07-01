@@ -24,7 +24,7 @@ interface ProductAttrs {
   rating?: Array<number>;
 }
 
-interface ProductDoc extends mongoose.Document {
+export interface ProductDoc extends mongoose.Document {
   available: boolean;
   title: string;
   img: string;

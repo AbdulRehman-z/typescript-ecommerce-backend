@@ -33,7 +33,7 @@ export const sendResetEmail = async (email: string, resetToken: string) => {
 
 // Send order confirmation email
 
-export const sendOrderConfirmationEmail = async (email: string, order: any) => {
+export const sendOrderConfirmationEmail = async (email: string,products:, order: any) => {
   try {
     // Create a transporter for sending emails
     const transporter = nodemailer.createTransport({
