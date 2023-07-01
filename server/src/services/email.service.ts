@@ -1,6 +1,9 @@
 import * as dotenv from "dotenv";
 dotenv.config();
 import nodemailer from "nodemailer";
+import { ProductDoc } from "../models/Product";
+import { OrderDoc } from "../models/Order";
+import { Address } from "../models/User";
 
 // Send reset email
 export const sendResetEmail = async (email: string, resetToken: string) => {
@@ -33,7 +36,12 @@ export const sendResetEmail = async (email: string, resetToken: string) => {
 
 // Send order confirmation email
 
-export const sendOrderConfirmationEmail = async (email: string,products:, order: any) => {
+export const sendOrderConfirmationEmail = async (
+  email: string,
+  address: Address,
+  products: ProductDoc[],
+  order: OrderDoc
+) => {
   try {
     // Create a transporter for sending emails
     const transporter = nodemailer.createTransport({
@@ -55,13 +63,12 @@ export const sendOrderConfirmationEmail = async (email: string,products:, order:
       <h2>Order Details</h2>
       <p>Order ID: ${order._id}</p>
       <p>Order Status: ${order.status}</p>
-      <p>Order Total: ${order.totalPrice}</p>
-      <p>Order Date: ${order.createdAt}</p>
       <h2>Shipping Address</h2>
-      <p>Address: ${order.address.address}</p>
-      <p>City: ${order.address.city}</p>
-      <p>Postal Code: ${order.address.postalCode}</p>
-      <p>Country: ${order.address.country}</p>
+      <p>Address: ${address.street}</p>
+      <p>Country: ${address.country}</p>
+      <p>State: ${address.state}</p>
+      <p>Zip Code: ${address.zipCode}</p>
+      <p>Phone Number: ${address.phoneNumber}</p>
       <h2>Order Items</h2>
       <table style="width:100%">
         <tr>
@@ -69,21 +76,16 @@ export const sendOrderConfirmationEmail = async (email: string,products:, order:
           <th>Quantity</th>
           <th>Price</th>
         </tr>
-        ${
-          order.products &&
-          order.products.map((product: any) => {
-            return `
+        ${products.map((product: any) => {
+          return `
           <tr>
             <td>${product.name}</td>
             <td>${product.quantity}</td>
             <td>${product.price}</td>
           </tr>
           `;
-          })
-        }
+        })}
       </table>
-      <h2>Payment Method</h2>
-      <p>Method: ${order.paymentMethod}</p>
       <h2>Order Summary</h2>
       <p>Total: ${order.totalPrice}</p>
       <h2>Thank you for shopping with us!</h2>

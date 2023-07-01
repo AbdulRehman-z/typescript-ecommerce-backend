@@ -1,6 +1,6 @@
 import express, { NextFunction, Request, Response } from "express";
 import { Order, OrderStatus } from "../../models/Order";
-import { Product } from "../../models/Product";
+import { Product, ProductDoc } from "../../models/Product";
 import { User } from "../../models/User";
 import {
   currentUserMiddleware,
@@ -8,6 +8,8 @@ import {
   requireAuthMiddleware,
 } from "../../common/src";
 import { Cart } from "../../models/Cart";
+import { sendOrderConfirmationEmail } from "../../services/email.service";
+import e from "express";
 
 const router = express.Router();
 
@@ -43,6 +45,7 @@ router.post(
       }
 
       const products = cart.products;
+      let fetchedProducts: ProductDoc[] = [];
       // update the reserved quantity of the products
       await Promise.all(
         products.map(async (product) => {
@@ -51,6 +54,8 @@ router.post(
           if (!productToUpdate) {
             throw new NotFoundError("Product not found");
           }
+
+          fetchedProducts.push(productToUpdate);
 
           productToUpdate.set({
             reservedQuantity:
@@ -64,6 +69,14 @@ router.post(
 
       // save the order in the db
       await Promise.all([order.save(), updatedUser?.save()]);
+
+      // send the order confirmation email
+      await sendOrderConfirmationEmail(
+        req.currentUser?.email!,
+        req.currentUser?.address!,
+        fetchedProducts,
+        order
+      );
 
       res.status(201).send(order);
     } catch (error) {

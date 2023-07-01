@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-import { Address } from "nodemailer/lib/mailer";
+import { Address } from "../../../models/User";
 
 interface UserPayload {
   id: string;
