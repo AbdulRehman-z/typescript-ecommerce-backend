@@ -3,7 +3,6 @@ import { Order, OrderStatus } from "../../models/Order";
 import { Product } from "../../models/Product";
 import { User } from "../../models/User";
 import {
-  BadRequestError,
   currentUserMiddleware,
   NotFoundError,
   requireAuthMiddleware,
@@ -34,6 +33,33 @@ router.post(
         { _id: req.currentUser!.id },
         { $push: { orders: order }, $pull: { cart: cartId } },
         { new: true }
+      );
+
+      // update the products in the cart to be sold
+      const cart = await Cart.findById(cartId);
+
+      if (!cart) {
+        throw new NotFoundError("Cart not found");
+      }
+
+      const products = cart.products;
+      // update the reserved quantity of the products
+      await Promise.all(
+        products.map(async (product) => {
+          const productToUpdate = await Product.findById(product.productId);
+
+          if (!productToUpdate) {
+            throw new NotFoundError("Product not found");
+          }
+
+          productToUpdate.set({
+            reservedQuantity:
+              productToUpdate.reservedQuantity! - product.quantity,
+            inStock: productToUpdate.inStock! - product.quantity,
+          });
+
+          await productToUpdate.save();
+        })
       );
 
       // save the order in the db
