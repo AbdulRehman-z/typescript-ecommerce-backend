@@ -4,6 +4,7 @@ import { Address } from "nodemailer/lib/mailer";
 
 interface UserPayload {
   id: string;
+  email: string;
   isAdmin: boolean;
   address: Address;
 }
