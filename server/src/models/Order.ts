@@ -35,10 +35,12 @@ const OrderSchema = new mongoose.Schema(
     userId: {
       type: String,
       required: true,
+      index: true,
     },
     cartId: {
       type: String,
       required: true,
+      index: true,
     },
     totalPrice: {
       type: Number,
