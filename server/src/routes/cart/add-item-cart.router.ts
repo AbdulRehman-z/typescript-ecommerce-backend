@@ -77,31 +77,23 @@ router.post(
         if (!user) {
           throw new NotFoundError("User not found");
         }
-        console.log("user: ", user);
 
         // if cart id already exists in the user cart array, don't add it again
-        console.log(user.cart.includes(newCart._id));
-        console.log("cart id: ", newCart._id);
         if (user.cart.includes(newCart._id)) {
-          console.log("cart id already exists in the user cart array");
         } else {
           user.set({
             cart: [...user.cart, newCart._id],
           });
           await user.save();
         }
-        console.log("user: ", user);
         await newCart.save();
       } else if (cart.products.length > 0) {
         // check if product already exists in the cart, if exist, update the quantity
-        console.log("cart: ", cart);
         cart.products.forEach(async (el) => {
           if (el.productId === product._id.toString()) {
-            console.log("product already exists in the cart");
             el.quantity += quantity;
             await cart.save();
           } else {
-            console.log("product does not exist in the cart");
             cart.set({
               products: [
                 ...cart.products,

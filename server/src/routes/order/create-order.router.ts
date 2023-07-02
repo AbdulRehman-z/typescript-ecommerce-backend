@@ -9,7 +9,6 @@ import {
 } from "../../common/src";
 import { Cart } from "../../models/Cart";
 import { sendOrderConfirmationEmail } from "../../services/email.service";
-import e from "express";
 
 const router = express.Router();
 
