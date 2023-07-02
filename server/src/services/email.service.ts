@@ -59,37 +59,71 @@ export const sendOrderConfirmationEmail = async (
       text: `Thank you for your order!`,
       // create a beautiful html version of the email
       html: ` 
-      <h1>Thank you for your order!</h1>
-      <h2>Order Details</h2>
-      <p>Order ID: ${order._id}</p>
-      <p>Order Status: ${order.status}</p>
-      <h2>Shipping Address</h2>
-      <p>Address: ${address.street}</p>
-      <p>Country: ${address.country}</p>
-      <p>State: ${address.state}</p>
-      <p>Zip Code: ${address.zipCode}</p>
-      <p>Phone Number: ${address.phoneNumber}</p>
-      <h2>Order Items</h2>
-      <table style="width:100%">
-        <tr>
-          <th>Product</th>
-          <th>Quantity</th>
-          <th>Price</th>
-        </tr>
-        ${products.map((product: any) => {
-          return `
-          <tr>
-            <td>${product.name}</td>
-            <td>${product.quantity}</td>
-            <td>${product.price}</td>
-          </tr>
-          `;
-        })}
-      </table>
-      <h2>Order Summary</h2>
-      <p>Total: ${order.totalPrice}</p>
-      <h2>Thank you for shopping with us!</h2>
-      `,
+      <!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    h1, h2 {
+      color: #333;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+  </style>
+</head>
+<body>
+  <h1>Thank you for your order!</h1>
+  <h2>Order Details</h2>
+  <p>Order ID: ${order._id}</p>
+  <p>Order Status: ${order.status}</p>
+  
+  <h2>Shipping Address</h2>
+  <p>Address: ${address.street}</p>
+  <p>Country: ${address.country}</p>
+  <p>State: ${address.state}</p>
+  <p>Zip Code: ${address.zipCode}</p>
+  <p>Phone Number: ${address.phoneNumber}</p>
+  
+  <h2>Order Items</h2>
+  <table>
+    <tr>
+      <th>Product</th>
+      <th>Quantity</th>
+      <th>Price</th>
+    </tr>
+    ${products.map((product: any) => {
+      return `
+      <tr>
+        <td>${product.name}</td>
+        <td>${product.quantity}</td>
+        <td>${product.price}</td>
+      </tr>
+      `;
+    })}
+  </table>
+  
+  <h2>Order Summary</h2>
+  <p>Total: ${order.totalPrice}</p>
+  
+  <h2>Thank you for shopping with us!</h2>
+</body>
+</html>`,
     };
 
     // Send the email
