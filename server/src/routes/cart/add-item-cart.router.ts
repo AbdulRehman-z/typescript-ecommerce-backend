@@ -64,6 +64,7 @@ router.post(
       // now add the product to the cart
       const cart = await Cart.findOne({ userId: req.currentUser!.id });
 
+      // if cart has already processed an order || there is no cart, create a new cart
       if (!cart) {
         // create a new cart
         const newCart = Cart.build({
@@ -78,15 +79,24 @@ router.post(
           throw new NotFoundError("User not found");
         }
 
-        // if cart id already exists in the user cart array, don't add it again
-        if (user.cart.includes(newCart._id)) {
-        } else {
+        if (user.cart.length === 0) {
           user.set({
             cart: [...user.cart, newCart._id],
           });
           await user.save();
         }
         await newCart.save();
+        res.status(200).json(newCart);
+      } else if (cart.orderId) {
+        // create a new cart
+        const newCart = Cart.build({
+          userId: req.currentUser!.id,
+          products: [{ productId: product._id, quantity: quantity }],
+        });
+
+        // now add the item to the user cart array
+        await newCart.save();
+        res.status(200).json(newCart);
       } else if (cart.products.length > 0) {
         // check if product already exists in the cart, if exist, update the quantity
         cart.products.forEach(async (el) => {
@@ -103,15 +113,15 @@ router.post(
             await cart.save();
           }
         });
+        res.status(200).json(cart);
       } else {
         // add the product to the cart
         cart.set({
           products: [{ productId: product._id, quantity }],
         });
         await cart.save();
+        res.status(200).json(cart);
       }
-
-      res.status(200).json(product);
     } catch (error) {
       next(error);
     }

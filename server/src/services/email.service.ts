@@ -14,13 +14,13 @@ export const sendResetEmail = async (email: string, resetToken: string) => {
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: process.env.ADMIN_EMAIL,
+        user: process.env.ADMIN_EMAIL_SRV,
         pass: process.env.PASS,
       },
     });
 
     const mailOptions = {
-      from: process.env.ADMIN_EMAIL,
+      from: process.env.ADMIN_EMAIL_SRV,
       to: email,
       subject: "Password Reset",
       text: `You are receiving this email because you (or someone else) has requested the reset of the password for your account.\n\n`,
@@ -47,19 +47,18 @@ export const sendOrderConfirmationEmail = async (
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: process.env.ADMIN_EMAIL,
+        user: process.env.ADMIN_EMAIL_SRV,
         pass: process.env.PASS,
       },
     });
 
     const mailOptions = {
-      from: process.env.ADMIN_EMAIL,
+      from: process.env.ADMIN_EMAIL_SRV,
       to: email,
       subject: "Order Confirmation",
       text: `Thank you for your order!`,
       // create a beautiful html version of the email
-      html: ` 
-      <!DOCTYPE html>
+      html: `<!DOCTYPE html>
 <html>
 <head>
   <style>
@@ -129,7 +128,7 @@ export const sendOrderConfirmationEmail = async (
     // Send the email
     await transporter.sendMail(mailOptions);
   } catch (error) {
-    throw new Error("Error sending order confirmation email");
+    throw new Error("Error sending order confirmation email" + error);
   }
 };
 

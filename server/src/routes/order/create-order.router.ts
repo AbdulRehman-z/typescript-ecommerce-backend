@@ -81,8 +81,11 @@ router.post(
           { new: true }
         );
 
+        // add order id to the cart
+        cart.set({ orderId: order.id });
+
         // save the order in the db
-        await Promise.all([order.save(), updatedUser?.save()]);
+        await Promise.all([cart.save(), order.save(), updatedUser?.save()]);
 
         // send the order confirmation email
         await sendOrderConfirmationEmail(
