@@ -12,6 +12,7 @@ export interface CartAttrs {
 
 interface CartDoc extends mongoose.Document {
   userId: string;
+  orderId?: string;
   products: [
     {
       productId: string;
@@ -29,6 +30,9 @@ const CartSchema = new mongoose.Schema(
     userId: {
       type: String,
       required: true,
+    },
+    orderId: {
+      type: String,
     },
     products: [
       {
