@@ -11,6 +11,7 @@ export interface CartAttrs {
 }
 
 interface CartDoc extends mongoose.Document {
+  // cartCountByUser: number;
   userId: string;
   orderId?: string;
   products: [
@@ -27,9 +28,15 @@ interface CartModel extends mongoose.Model<CartDoc> {
 
 const CartSchema = new mongoose.Schema(
   {
+    //   cartCountByUser: {
+    //     type: Number,
+    //     required: true,
+    //     index: true,
+    //   },
     userId: {
       type: String,
       required: true,
+      index: true,
     },
     orderId: {
       type: String,

@@ -88,12 +88,12 @@ router.post(
         await Promise.all([cart.save(), order.save(), updatedUser?.save()]);
 
         // send the order confirmation email
-        await sendOrderConfirmationEmail(
-          req.currentUser?.email!,
-          req.currentUser?.address!,
-          fetchedProducts,
-          order
-        );
+        // await sendOrderConfirmationEmail(
+        //   req.currentUser?.email!,
+        //   req.currentUser?.address!,
+        //   fetchedProducts,
+        //   order
+        // );
         res.status(201).send(order);
       }
     } catch (error) {
