@@ -6,6 +6,7 @@ import {
   currentUserMiddleware,
   NotFoundError,
   requireAuthMiddleware,
+  BadRequestError,
 } from "../../common/src";
 import { Cart } from "../../models/Cart";
 import { sendOrderConfirmationEmail } from "../../services/email.service";
@@ -22,24 +23,19 @@ router.post(
 
       let totalPrice: number;
       // check if order with the cart already exists
-      const orderExists = await Order.findOne({ cartId });
-      if (orderExists) {
-        return res.status(200).send(orderExists);
+      // const orderExists = await Order.findOne({ cartId });
+      const cart = await Cart.findById(cartId);
+      let fetchedCart = cart;
+      if (cart?.orderId) {
+        return res.status(200).send({ message: "Order already exists", cart });
       } else {
-        // update the products in the cart to be sold
-        const cart = await Cart.findById(cartId);
-
-        if (!cart) {
-          throw new NotFoundError("Cart not found");
-        }
-
-        const products = cart.products;
+        const products = fetchedCart?.products;
         const fetchedProducts: ProductDoc[] = [];
         const prices: any[] = [];
 
         // update the reserved quantity of the products
         await Promise.all(
-          products.map(async (product) => {
+          products!.map(async (product) => {
             const productToUpdate = await Product.findById(product.productId);
 
             if (!productToUpdate) {
@@ -82,18 +78,22 @@ router.post(
         );
 
         // add order id to the cart
-        cart.set({ orderId: order.id });
+        fetchedCart?.set({ orderId: order.id });
 
         // save the order in the db
-        await Promise.all([cart.save(), order.save(), updatedUser?.save()]);
+        await Promise.all([
+          fetchedCart?.save(),
+          order.save(),
+          updatedUser?.save(),
+        ]);
 
         // send the order confirmation email
-        // await sendOrderConfirmationEmail(
-        //   req.currentUser?.email!,
-        //   req.currentUser?.address!,
-        //   fetchedProducts,
-        //   order
-        // );
+        await sendOrderConfirmationEmail(
+          req.currentUser?.email!,
+          req.currentUser?.address!,
+          fetchedProducts,
+          order
+        );
         res.status(201).send(order);
       }
     } catch (error) {

@@ -65,9 +65,6 @@ router.post(
       const cart = await Cart.findOne({
         $and: [{ userId: req.currentUser!.id }, { orderId: null }],
       });
-      console.log("-----------------------------------");
-      console.log("cart", cart);
-      console.log("-----------------------------------");
 
       // if cart has already processed an order || there is no cart, create a new cart
       if (!cart) {
@@ -92,30 +89,6 @@ router.post(
           });
           await user.save();
         }
-        await newCart.save();
-        res.status(200).json(newCart);
-      } else if (cart.orderId) {
-        // create a new cart
-        const newCart = Cart.build({
-          userId: req.currentUser!.id,
-          products: [{ productId: product._id, quantity: quantity }],
-        });
-
-        console.log("-----------------------------------");
-        console.log("2nd check");
-        console.log("-----------------------------------");
-        // now add the item to the user cart array
-        await newCart.save();
-        res.status(200).json(newCart);
-      } else if (cart && cart.orderId) {
-        const newCart = Cart.build({
-          userId: req.currentUser!.id,
-          products: [{ productId: product._id, quantity: quantity }],
-        });
-        console.log("-----------------------------------");
-        console.log("3rd check");
-        console.log("-----------------------------------");
-        // now add the item to the user cart array
         await newCart.save();
         res.status(200).json(newCart);
       } else if (cart.products.length > 0) {
