@@ -23,31 +23,38 @@ router.post(
 
       let totalPrice: number;
       // check if order with the cart already exists
-      // const orderExists = await Order.findOne({ cartId });
       const cart = await Cart.findById(cartId);
       let fetchedCart = cart;
+
+      // if cart has orderId, it means that order already processed
       if (cart?.orderId) {
         return res.status(200).send({ message: "Order already exists", cart });
       } else {
+        // if cart doesn't have orderId, it means that order is not processed yet, proceed with the order
         const products = fetchedCart?.products;
         const fetchedProducts: ProductDoc[] = [];
         const prices: any[] = [];
 
         // update the reserved quantity of the products
         await Promise.all(
+          // loop through all products in the cart
           products!.map(async (product) => {
             const productToUpdate = await Product.findById(product.productId);
 
+            // if product is not found, throw an error
             if (!productToUpdate) {
               throw new NotFoundError("Product not found");
             }
 
+            // calculate the total price of the product with respect to quantity and then push it to the prices array
             const calcPrice =
               parseInt(productToUpdate.price) * product.quantity;
             prices.push(calcPrice);
 
+            // push the product to the fetchedProducts array, so that we can use it later to send the order confirmation email
             fetchedProducts.push(productToUpdate);
 
+            // set the required fields on the product doc
             productToUpdate.set({
               reservedQuantity:
                 productToUpdate.reservedQuantity! - product.quantity,

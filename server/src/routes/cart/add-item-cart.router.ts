@@ -73,16 +73,15 @@ router.post(
           userId: req.currentUser!.id,
           products: [{ productId: product._id, quantity: quantity }],
         });
+
         // now add the item to the user cart array
         const user = await User.findById(req.currentUser!.id);
-        console.log("-----------------------------------");
-        console.log("1nd check");
-        console.log("-----------------------------------");
 
         if (!user) {
           throw new NotFoundError("User not found");
         }
 
+        // if user cart length is > 0, it means there is already cart present
         if (user.cart.length === 0) {
           user.set({
             cart: [newCart._id],
@@ -93,9 +92,6 @@ router.post(
         res.status(200).json(newCart);
       } else if (cart.products.length > 0) {
         // check if product already exists in the cart, if exist, update the quantity
-        console.log("-----------------------------------");
-        console.log("4th check");
-        console.log("-----------------------------------");
         cart.products.forEach(async (el) => {
           if (el.productId === product._id.toString()) {
             el.quantity += quantity;
