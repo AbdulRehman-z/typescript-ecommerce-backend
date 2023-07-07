@@ -43,6 +43,10 @@ export const sendOrderConfirmationEmail = async (
   order: OrderDoc
 ) => {
   try {
+    console.log("------------------------------------");
+    console.log(products);
+    console.log("------------------------------------");
+
     // Create a transporter for sending emails
     const transporter = nodemailer.createTransport({
       service: "gmail",
