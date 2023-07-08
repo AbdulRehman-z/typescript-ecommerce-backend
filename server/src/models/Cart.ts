@@ -11,6 +11,7 @@ export interface CartAttrs {
 }
 
 interface CartDoc extends mongoose.Document {
+  jobId?: string;
   expired: boolean;
   userId: string;
   orderId?: string;
@@ -28,6 +29,10 @@ interface CartModel extends mongoose.Model<CartDoc> {
 
 const CartSchema = new mongoose.Schema(
   {
+    jobId: {
+      type: String,
+      default: null,
+    },
     expired: {
       type: Boolean,
       default: false,

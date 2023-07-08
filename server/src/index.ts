@@ -10,13 +10,13 @@ dotenv.config();
 
 console.clear();
 
+const { removeQueue } = createBullBoard({
+  queues: [new BullAdapter(expirationQueue)],
+  serverAdapter: serverAdapter,
+});
+
 app.listen(process.env.PORT, async () => {
   await connectDb();
-
-  createBullBoard({
-    queues: [new BullAdapter(expirationQueue)],
-    serverAdapter: serverAdapter,
-  });
 
   // start processing the jobs
   expirationQueue.on("completed", async (job) => {

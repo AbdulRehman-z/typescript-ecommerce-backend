@@ -10,6 +10,7 @@ import {
 } from "../../common/src";
 import { Cart } from "../../models/Cart";
 import { sendOrderConfirmationEmail } from "../../services/email.service";
+import Bull from "bull";
 
 const router = express.Router();
 
@@ -93,6 +94,8 @@ router.post(
           order.save(),
           updatedUser?.save(),
         ]);
+
+        //
 
         // send the order confirmation email
         await sendOrderConfirmationEmail(

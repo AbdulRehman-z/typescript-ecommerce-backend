@@ -1,6 +1,8 @@
 import bull from "bull";
 import { Cart } from "../models/Cart";
 import { User } from "../models/User";
+import { Product } from "../models/Product";
+import { NotFoundError } from "../common/src";
 
 interface Payload {
   cartId: string;
@@ -15,8 +17,36 @@ expirationQueue.process(async (job) => {
   try {
     const { cartId } = job.data;
 
-    // remove the cart id from users cart array and delete the cart from the cart collection
+    // set the cart expired to true & add the products quantity that are in the cart.products array back to their respective products
     const cart = await Cart.findById(cartId);
+
+    if (!cart) {
+      throw new Error("Cart not found");
+    }
+
+    cart.set({
+      expired: true,
+    });
+
+    const products = cart.products;
+
+    const updatedProducts = products!.map(async (product) => {
+      const productToUpdate = await Product.findById(product.productId);
+
+      // if product is not found, throw an error
+      if (!productToUpdate) {
+        throw new NotFoundError("Product not found");
+      }
+
+      // set the required fields on the product doc
+      productToUpdate.set({
+        reservedQuantity: productToUpdate.reservedQuantity! - product.quantity,
+        inStock: productToUpdate.inStock! + product.quantity,
+      });
+
+      await productToUpdate.save();
+    });
+
     const user = await User.findByIdAndUpdate(
       cart!.userId,
       {
@@ -25,7 +55,7 @@ expirationQueue.process(async (job) => {
       { new: true }
     );
 
-    await Promise.all([cart!.delete(), user!.save()]);
+    await Promise.all([cart!.save(), user!.save(), ...updatedProducts]);
   } catch (error) {
     console.log(error);
   }

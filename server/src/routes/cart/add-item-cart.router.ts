@@ -64,7 +64,11 @@ router.post(
 
       // now add the product to the cart
       const cart = await Cart.findOne({
-        $and: [{ userId: req.currentUser!.id }, { orderId: null }],
+        $and: [
+          { userId: req.currentUser!.id },
+          { orderId: null },
+          { expired: false },
+        ],
       });
 
       // if cart has already processed an order || there is no cart, create a new cart
@@ -91,7 +95,8 @@ router.post(
           await expirationQueue.add(
             { cartId: newCart._id, userId: user.id },
             {
-              delay: 10000,
+              // delay for 15 minutes
+              delay: 1800000,
             }
           );
           await user.save();
@@ -116,7 +121,7 @@ router.post(
           await expirationQueue.add(
             { cartId: cart._id, userId: cart.userId },
             {
-              delay: 10000,
+              delay: 1800000,
             }
           );
         });
