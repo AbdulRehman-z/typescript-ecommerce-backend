@@ -6,11 +6,9 @@ import {
   currentUserMiddleware,
   NotFoundError,
   requireAuthMiddleware,
-  BadRequestError,
 } from "../../common/src";
 import { Cart } from "../../models/Cart";
 import { sendOrderConfirmationEmail } from "../../services/email.service";
-import Bull from "bull";
 import { expirationQueue } from "../../services/expiration-queue.service";
 
 const router = express.Router();
@@ -70,10 +68,6 @@ router.post(
           })
         );
 
-        console.log("-------------------------------");
-        console.log("fetched products: ", fetchedProducts);
-        console.log("-------------------------------");
-
         // sum up total prices of all products in the prices array
         totalPrice = prices.reduce((a, b) => a + b, 0);
 
@@ -105,8 +99,6 @@ router.post(
           order.save(),
           updatedUser?.save(),
         ]);
-
-        //
 
         // send the order confirmation email
         await sendOrderConfirmationEmail(

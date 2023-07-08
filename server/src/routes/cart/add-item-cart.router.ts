@@ -112,41 +112,7 @@ router.post(
           res.status(200).json(newCart);
         }
       } else if (cart.products.length > 0) {
-        // for (let i = 0; i < cart.products.length; i++) {
-        //   if (cart.products[i].productId === product._id.toString()) {
-        //     cart.products[i].quantity += quantity;
-        //     await cart.save();
-        //     res.status(200).json(cart);
-        //   } else if (cart.products[i].productId !== product._id.toString()) {
-        //     cart.set({
-        //       products: [
-        //         ...cart.products,
-        //         { productId: product._id, quantity },
-        //       ],
-        //     });
-        //     await cart.save();
-        //     res.status(200).json(cart);
-        //   }
-        // }
-
-        // if (
-        //   cart.products.some((el) => el.productId === product._id.toString())
-        // ) {
-        //   const productIndex = cart.products.findIndex(
-        //     (el) => el.productId === product._id.toString()
-        //   );
-
-        //   cart.products[productIndex].quantity += quantity;
-        //   await cart.save();
-        //   res.status(200).json(cart);
-        // } else {
-        //   cart.set({
-        //     products: [...cart.products, { productId: product._id, quantity }],
-        //   });
-        //   await cart.save();
-        //   res.status(200).json(cart);
-        // }
-
+        // if cart has already processed an order || there is no cart, create a new cart
         const existingProduct = cart.products.find(
           (el) => el.productId === product._id.toString()
         );
@@ -159,30 +125,6 @@ router.post(
 
         await cart.save();
         res.status(200).json(cart);
-
-        // // check if product already exists in the cart, if exist, update the quantity
-        // cart.products.forEach(async (el) => {
-        //   if (el.productId === product._id.toString()) {
-        //     console.log("------------------------------------");
-        //     console.log("product already exists in the cart");
-        //     console.log("------------------------------------");
-        //     el.quantity += quantity;
-        //     await cart.save();
-        //     res.status(200).json(cart);
-        //   } else if (el.productId !== product._id.toString()) {
-        //     console.log("------------------------------------");
-        //     console.log("product does not exist in the cart");
-        //     console.log("------------------------------------");
-        //     cart.set({
-        //       products: [
-        //         ...cart.products,
-        //         { productId: product._id, quantity },
-        //       ],
-        //     });
-        //     await cart.save();
-        //     res.status(200).json(cart);
-        //   }
-        // });
       } else {
         // add the product to the cart
         cart.set({
