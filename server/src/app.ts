@@ -1,9 +1,8 @@
 import express from "express";
-import Queue from "bull";
 import morgan from "morgan";
 import dotenv from "dotenv";
-import { errorHandlerMiddleware } from "./common/src";
 import cookieSession from "cookie-session";
+import { errorHandlerMiddleware } from "./common/src";
 import { loginRouter } from "./routes/user/login.router";
 import { signupRouter } from "./routes/user/signup.router";
 import { currentuserRouter } from "./routes/user/currentuser.router";
@@ -20,14 +19,17 @@ import { addToCartRouter } from "./routes/cart/add-item-cart.router";
 import { deleteCartItemRouter } from "./routes/cart/delete-cart-item.router";
 import { createOrderRouter } from "./routes/order/create-order.router";
 import { ExpressAdapter } from "@bull-board/express";
-// import { serverAdapter } from "./index";
 dotenv.config();
 
 const app = express();
+const serverAdapter = new ExpressAdapter();
+
+/*
+Configurations 
+**/
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(cookieSession({ signed: false, secure: false }));
-export const serverAdapter = new ExpressAdapter();
 serverAdapter.setBasePath("/admin/queues");
 
 /*
@@ -60,9 +62,16 @@ app.use(deleteCartItemRouter);
 OrderRoutes
 **/
 app.use(createOrderRouter);
+
+/*
+BullBoard Routes
+**/
 serverAdapter.setBasePath("/admin/queues");
 app.use("/admin/queues", serverAdapter.getRouter());
 
+/*
+Error Handler
+**/
 app.use(errorHandlerMiddleware);
 
-export { app };
+export { app, serverAdapter };

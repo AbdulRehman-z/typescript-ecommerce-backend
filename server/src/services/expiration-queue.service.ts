@@ -1,10 +1,4 @@
 import bull from "bull";
-import QueueMQ from "bullmq";
-import { createBullBoard } from "@bull-board/api";
-import { BullAdapter } from "@bull-board/api/bullAdapter";
-import { ExpressAdapter } from "@bull-board/express";
-import { BullMQAdapter } from "@bull-board/api/bullMQAdapter";
-
 import { Cart } from "../models/Cart";
 import { User } from "../models/User";
 
@@ -36,21 +30,3 @@ expirationQueue.process(async (job) => {
     console.log(error);
   }
 });
-
-// const { createBullBoard } = require("@bull-board/api");
-// const { BullAdapter } = require("@bull-board/api/bullAdapter");
-// const { BullMQAdapter } = require("@bull-board/api/bullMQAdapter");
-// const { ExpressAdapter } = require("@bull-board/express");
-
-// const someQueue = new Queue("someQueueName", {
-//   redis: { port: 6379, host: "127.0.0.1", password: "foobared" },
-// }); // if you have a special connection to redis.
-// const someOtherQueue = new Queue("someOtherQueueName");
-// const queueMQ = new QueueMQ("queueMQName");
-
-// export const serverAdapter = new ExpressAdapter();
-
-// const { addQueue, removeQueue, setQueues, replaceQueues } = createBullBoard({
-//   queues: [new BullAdapter(expirationQueue)],
-//   serverAdapter: serverAdapter,
-// });
