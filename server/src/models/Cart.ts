@@ -11,7 +11,7 @@ export interface CartAttrs {
 }
 
 interface CartDoc extends mongoose.Document {
-  // cartCountByUser: number;
+  expired: boolean;
   userId: string;
   orderId?: string;
   products: [
@@ -28,11 +28,10 @@ interface CartModel extends mongoose.Model<CartDoc> {
 
 const CartSchema = new mongoose.Schema(
   {
-    //   cartCountByUser: {
-    //     type: Number,
-    //     required: true,
-    //     index: true,
-    //   },
+    expired: {
+      type: Boolean,
+      default: false,
+    },
     userId: {
       type: String,
       required: true,
