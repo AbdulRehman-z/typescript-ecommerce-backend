@@ -9,6 +9,7 @@ import { Product } from "../../models/Product";
 import { Cart } from "../../models/Cart";
 import { User } from "../../models/User";
 import { expirationQueue } from "../../services/expiration-queue.service";
+import { Job } from "bullmq";
 
 const router = exprees.Router();
 
@@ -73,12 +74,6 @@ router.post(
 
       // if cart has already processed an order || there is no cart, create a new cart
       if (!cart) {
-        // create a new cart
-        const newCart = Cart.build({
-          userId: req.currentUser!.id,
-          products: [{ productId: product._id, quantity: quantity }],
-        });
-
         // now add the item to the user cart array
         const user = await User.findById(req.currentUser!.id);
 
@@ -88,48 +83,110 @@ router.post(
 
         // if user cart length is > 0, it means there is already cart present
         if (user.cart.length === 0) {
+          // create a new cart
+          const newCart = Cart.build({
+            userId: req.currentUser!.id,
+            products: [{ productId: product._id, quantity: quantity }],
+          });
+
           user.set({
             cart: [newCart._id],
           });
 
-          await expirationQueue.add(
+          const job = await expirationQueue.add(
             { cartId: newCart._id, userId: user.id },
             {
               // delay for 15 minutes
               delay: 1800000,
             }
           );
-          await user.save();
+
+          newCart.set({
+            jobId: job.id,
+          });
+
+          // await user.save();
+          // await newCart.save();
+
+          await Promise.all([user.save(), newCart.save()]);
+          res.status(200).json(newCart);
         }
-        await newCart.save();
-        res.status(200).json(newCart);
       } else if (cart.products.length > 0) {
-        // check if product already exists in the cart, if exist, update the quantity
-        cart.products.forEach(async (el) => {
-          if (el.productId === product._id.toString()) {
-            el.quantity += quantity;
-            await cart.save();
-          } else {
-            cart.set({
-              products: [
-                ...cart.products,
-                { productId: product._id, quantity },
-              ],
-            });
-            await cart.save();
-          }
-          await expirationQueue.add(
-            { cartId: cart._id, userId: cart.userId },
-            {
-              delay: 1800000,
-            }
-          );
-        });
+        // for (let i = 0; i < cart.products.length; i++) {
+        //   if (cart.products[i].productId === product._id.toString()) {
+        //     cart.products[i].quantity += quantity;
+        //     await cart.save();
+        //     res.status(200).json(cart);
+        //   } else if (cart.products[i].productId !== product._id.toString()) {
+        //     cart.set({
+        //       products: [
+        //         ...cart.products,
+        //         { productId: product._id, quantity },
+        //       ],
+        //     });
+        //     await cart.save();
+        //     res.status(200).json(cart);
+        //   }
+        // }
+
+        // if (
+        //   cart.products.some((el) => el.productId === product._id.toString())
+        // ) {
+        //   const productIndex = cart.products.findIndex(
+        //     (el) => el.productId === product._id.toString()
+        //   );
+
+        //   cart.products[productIndex].quantity += quantity;
+        //   await cart.save();
+        //   res.status(200).json(cart);
+        // } else {
+        //   cart.set({
+        //     products: [...cart.products, { productId: product._id, quantity }],
+        //   });
+        //   await cart.save();
+        //   res.status(200).json(cart);
+        // }
+
+        const existingProduct = cart.products.find(
+          (el) => el.productId === product._id.toString()
+        );
+
+        if (existingProduct) {
+          existingProduct.quantity += quantity;
+        } else {
+          cart.products.push({ productId: product._id, quantity });
+        }
+
+        await cart.save();
         res.status(200).json(cart);
+
+        // // check if product already exists in the cart, if exist, update the quantity
+        // cart.products.forEach(async (el) => {
+        //   if (el.productId === product._id.toString()) {
+        //     console.log("------------------------------------");
+        //     console.log("product already exists in the cart");
+        //     console.log("------------------------------------");
+        //     el.quantity += quantity;
+        //     await cart.save();
+        //     res.status(200).json(cart);
+        //   } else if (el.productId !== product._id.toString()) {
+        //     console.log("------------------------------------");
+        //     console.log("product does not exist in the cart");
+        //     console.log("------------------------------------");
+        //     cart.set({
+        //       products: [
+        //         ...cart.products,
+        //         { productId: product._id, quantity },
+        //       ],
+        //     });
+        //     await cart.save();
+        //     res.status(200).json(cart);
+        //   }
+        // });
       } else {
         // add the product to the cart
         cart.set({
-          products: [{ productId: product._id, quantity }],
+          products: [...cart.products, { productId: product._id, quantity }],
         });
         await cart.save();
         res.status(200).json(cart);

@@ -11,6 +11,7 @@ import {
 import { Cart } from "../../models/Cart";
 import { sendOrderConfirmationEmail } from "../../services/email.service";
 import Bull from "bull";
+import { expirationQueue } from "../../services/expiration-queue.service";
 
 const router = express.Router();
 
@@ -33,7 +34,7 @@ router.post(
       } else {
         // if cart doesn't have orderId, it means that order is not processed yet, proceed with the order
         const products = fetchedCart?.products;
-        const fetchedProducts: ProductDoc[] = [];
+        let fetchedProducts: any = [];
         const prices: any[] = [];
 
         // update the reserved quantity of the products
@@ -52,9 +53,6 @@ router.post(
               parseInt(productToUpdate.price) * product.quantity;
             prices.push(calcPrice);
 
-            // push the product to the fetchedProducts array, so that we can use it later to send the order confirmation email
-            fetchedProducts.push(productToUpdate);
-
             // set the required fields on the product doc
             productToUpdate.set({
               reservedQuantity:
@@ -62,9 +60,19 @@ router.post(
               inStock: productToUpdate.inStock! - product.quantity,
             });
 
+            // push the product to the fetchedProducts array, so that we can use it later to send the order confirmation email
+            fetchedProducts.push({
+              productToUpdate,
+              quantity: product.quantity,
+            });
+
             await productToUpdate.save();
           })
         );
+
+        console.log("-------------------------------");
+        console.log("fetched products: ", fetchedProducts);
+        console.log("-------------------------------");
 
         // sum up total prices of all products in the prices array
         totalPrice = prices.reduce((a, b) => a + b, 0);
@@ -85,8 +93,11 @@ router.post(
           { new: true }
         );
 
+        // remove the queue job from the queue
+        await expirationQueue.removeJobs(fetchedCart?.jobId!);
+
         // add order id to the cart
-        fetchedCart?.set({ orderId: order.id });
+        fetchedCart?.set({ orderId: order.id, expired: true });
 
         // save the order in the db
         await Promise.all([

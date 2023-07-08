@@ -44,7 +44,7 @@ export const sendOrderConfirmationEmail = async (
 ) => {
   try {
     console.log("------------------------------------");
-    console.log(products);
+    console.log("Products: ", products);
     console.log("------------------------------------");
 
     // Create a transporter for sending emails
@@ -77,6 +77,11 @@ export const sendOrderConfirmationEmail = async (
     table {
       border-collapse: collapse;
       width: 100%;
+    }
+
+    img {
+      width: 40px !important;
+      height: 40px !important;
     }
 
     th, td {
@@ -113,11 +118,12 @@ export const sendOrderConfirmationEmail = async (
     ${products.map((product: any) => {
       return `
       <tr>
-        <td>${product.name}</td>
+        <td>${product.productToUpdate.title}</td>
         <td>${product.quantity}</td>
-        <td>${product.price}</td>
-      </tr>
-      `;
+        <td>${product.quantity} X ${product.productToUpdate.price} = ${
+        product.quantity * product.productToUpdate.price
+      }</td>
+      </tr>`;
     })}
   </table>
   
