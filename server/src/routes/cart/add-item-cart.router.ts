@@ -8,6 +8,7 @@ import {
 import { Product } from "../../models/Product";
 import { Cart } from "../../models/Cart";
 import { User } from "../../models/User";
+import { expirationQueue } from "../../services/expiration-queue.service";
 
 const router = exprees.Router();
 
@@ -86,6 +87,13 @@ router.post(
           user.set({
             cart: [newCart._id],
           });
+
+          await expirationQueue.add(
+            { cartId: newCart._id, userId: user.id },
+            {
+              delay: 10000,
+            }
+          );
           await user.save();
         }
         await newCart.save();
@@ -105,6 +113,12 @@ router.post(
             });
             await cart.save();
           }
+          await expirationQueue.add(
+            { cartId: cart._id, userId: cart.userId },
+            {
+              delay: 10000,
+            }
+          );
         });
         res.status(200).json(cart);
       } else {
