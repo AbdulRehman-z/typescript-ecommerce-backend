@@ -9,7 +9,6 @@ import { Product } from "../../models/Product";
 import { Cart } from "../../models/Cart";
 import { User } from "../../models/User";
 import { expirationQueue } from "../../services/expiration-queue.service";
-import { Job } from "bullmq";
 
 const router = exprees.Router();
 
@@ -104,9 +103,6 @@ router.post(
           newCart.set({
             jobId: job.id,
           });
-
-          // await user.save();
-          // await newCart.save();
 
           await Promise.all([user.save(), newCart.save()]);
           res.status(200).json(newCart);

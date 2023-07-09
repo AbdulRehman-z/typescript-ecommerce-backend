@@ -5,7 +5,6 @@ import {
   NotAuthorizedError,
   validateRequestMiddleware,
   currentUserMiddleware,
-  BadRequestError,
 } from "../../common/src";
 import jwt from "jsonwebtoken";
 import express from "express";
