@@ -37,8 +37,8 @@ export const sendResetEmail = async (email: string, resetToken: string) => {
 export const sendOrderConfirmationEmail = async (
   email: string,
   address: Address,
-  products: ProductDoc[],
-  order: OrderDoc
+  order: OrderDoc,
+  products?: ProductDoc[]
 ) => {
   try {
     // Create a transporter for sending emails
@@ -145,7 +145,7 @@ export const sendOrderConfirmationEmail = async (
                 <th>Quantity</th>
                 <th>Price</th>
               </tr>
-              ${products.map((product: any) => {
+              ${products?.map((product: any) => {
                 return `
                 <tr>
                   <td>${product.productToUpdate.title}</td>

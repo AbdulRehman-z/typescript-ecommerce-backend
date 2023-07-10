@@ -104,8 +104,8 @@ router.post(
         await sendOrderConfirmationEmail(
           req.currentUser?.email!,
           req.currentUser?.address!,
-          fetchedProducts,
-          order
+          order,
+          fetchedProducts
         );
         res.status(201).send(order);
       }
