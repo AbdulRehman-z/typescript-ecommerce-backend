@@ -1,26 +1,6 @@
 import mongoose, { mongo } from "mongoose";
 import { Password } from "../services/password.service";
-
-export interface Address {
-  street: string;
-  houseNumber?: number;
-  zipCode: string;
-  state: string;
-  country: string;
-  phoneNumber: string;
-  additionalInfo?: string;
-}
-
-interface UserAttrs {
-  username: string;
-  email: string;
-  password: string;
-  gender: string;
-  resetToken?: string;
-  resetTokenExpiration?: number;
-  isAdmin: boolean;
-  address: Address;
-}
+import { Address, UserAttrs } from "../types/types";
 
 interface UserDoc extends mongoose.Document {
   username: string;

@@ -1,28 +1,5 @@
 import mongoose from "mongoose";
-
-interface FlashSale {
-  active: boolean;
-  discount: number;
-  startDate: Date | undefined;
-  endDate: Date | undefined;
-}
-
-interface ProductAttrs {
-  available?: boolean;
-  title: string;
-  img: string;
-  description: string;
-  category: string;
-  sizes: Array<string>;
-  gender: string;
-  inStock: number;
-  color: Array<string>;
-  price: string;
-  avaliableQuantity: number;
-  flashSale: FlashSale;
-  reservedQuantity?: number;
-  rating?: Array<number>;
-}
+import { FlashSale, ProductAttrs } from "../types/types";
 
 export interface ProductDoc extends mongoose.Document {
   available: boolean;

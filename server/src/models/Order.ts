@@ -1,22 +1,5 @@
 import mongoose from "mongoose";
-
-enum OrderStatus {
-  Pending = "pending",
-  Processing = "processing",
-  Shipped = "shipped",
-  Delivered = "delivered",
-  Cancelled = "cancelled",
-  Returned = "returned",
-  Refunded = "refunded",
-}
-
-interface OrderAttrs {
-  userId: string;
-  cartId: string;
-  totalPrice: number;
-  address: Object;
-  status: OrderStatus;
-}
+import { OrderAttrs, OrderStatus } from "../types/types";
 
 export interface OrderDoc extends mongoose.Document {
   userId: string;

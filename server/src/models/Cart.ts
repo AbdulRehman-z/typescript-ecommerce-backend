@@ -1,14 +1,5 @@
 import mongoose from "mongoose";
-
-export interface CartAttrs {
-  userId: string;
-  products: [
-    {
-      productId: string;
-      quantity: number;
-    }
-  ];
-}
+import { CartAttrs } from "../types/types";
 
 interface CartDoc extends mongoose.Document {
   jobId?: string;
