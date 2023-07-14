@@ -13,6 +13,33 @@ export const expirationQueue = new bull<Payload>("order:expiration", {
   redis: { port: 6379, host: "127.0.0.1" },
 });
 
+expirationQueue.on("completed", async (job) => {
+  console.log("Job completed", job.data);
+});
+
+expirationQueue.on("waiting", (jobId) => {
+  console.log("Job waiting", jobId);
+});
+expirationQueue.on("failed", (job, err) => {
+  console.log("Job failed", job.data);
+});
+
+expirationQueue.on("error", (err) => {
+  console.log("Job error", err);
+});
+
+expirationQueue.on("waiting", (jobId) => {
+  console.log("Job waiting", jobId);
+});
+
+expirationQueue.on("active", (job) => {
+  console.log("Job active", job.data);
+});
+
+expirationQueue.on("removed", (job) => {
+  console.log("Job removed", job);
+});
+
 expirationQueue.process(async (job) => {
   try {
     const { cartId } = job.data;
