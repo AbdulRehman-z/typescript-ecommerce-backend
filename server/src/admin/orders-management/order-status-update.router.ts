@@ -12,7 +12,7 @@ import { sendOrderConfirmationEmail } from "../../services/email.service";
 
 const router = express.Router();
 
-router.post(
+router.put(
   "/api/admin/orders/status",
   currentUserMiddleware,
   requireAuthMiddleware,
@@ -41,6 +41,7 @@ router.post(
 
           Promise.all([
             await expirationQueue.removeJobs(cart.jobId!),
+
             await order.save(),
             await sendOrderConfirmationEmail(
               req.currentUser!.email,
@@ -250,3 +251,5 @@ router.post(
     } catch (error) {}
   }
 );
+
+export { router as updateOrderStatusRouter };

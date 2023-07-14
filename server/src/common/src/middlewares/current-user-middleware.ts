@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-import { Address } from "../../../models/User";
+import { Address } from "../../../types/types";
 
 interface UserPayload {
   id: string;

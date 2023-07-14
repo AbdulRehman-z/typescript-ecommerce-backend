@@ -19,6 +19,7 @@ import { addToCartRouter } from "./routes/cart/add-item-cart.router";
 import { deleteCartItemRouter } from "./routes/cart/delete-cart-item.router";
 import { createOrderRouter } from "./routes/order/create-order.router";
 import { ExpressAdapter } from "@bull-board/express";
+import { updateOrderStatusRouter } from "./admin/orders-management/order-status-update.router";
 dotenv.config();
 
 const app = express();
@@ -62,6 +63,11 @@ app.use(deleteCartItemRouter);
 OrderRoutes
 **/
 app.use(createOrderRouter);
+
+/*
+AdminRoutes
+**/
+app.use(updateOrderStatusRouter);
 
 /*
 BullBoard Routes

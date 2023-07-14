@@ -2,8 +2,8 @@ import * as dotenv from "dotenv";
 dotenv.config();
 import nodemailer from "nodemailer";
 import { ProductDoc } from "../models/Product";
-import { OrderDoc, OrderStatus } from "../models/Order";
-import { Address } from "../models/User";
+import { OrderDoc } from "../models/Order";
+import { Address, OrderStatus } from "../types/types";
 
 // Send reset email
 export const sendResetEmail = async (email: string, resetToken: string) => {
@@ -51,7 +51,6 @@ export const sendOrderConfirmationEmail = async (
     });
 
     let emailSubject = "";
-    let emailText = "";
     let emailHtml = "";
 
     const styles = `
@@ -92,39 +91,11 @@ export const sendOrderConfirmationEmail = async (
     switch (order.status) {
       case OrderStatus.Pending:
         emailSubject = "Order Confirmation - Pending";
-        emailText =
-          "Thank you for your order! It is currently being processed.";
         emailHtml = `<!DOCTYPE html>
           <html>
           <head>
             <style>
-              body {
-                font-family: Arial, sans-serif;
-              }
-            
-              h1, h2 {
-                color: #333;
-              }
-            
-              table {
-                border-collapse: collapse;
-                width: 100%;
-              }
-            
-              img {
-                width: 40px;
-                height: 40px;
-              }
-            
-              th, td {
-                border: 1px solid #ddd;
-                padding: 8px;
-                text-align: left;
-              }
-            
-              th {
-                background-color: #f2f2f2;
-              }
+              ${styles}
             </style>
           </head>
           <body>
@@ -167,8 +138,6 @@ export const sendOrderConfirmationEmail = async (
       case OrderStatus.Processing:
         // Add CSS styling for processing status
         emailSubject = "Order Confirmation - Processing";
-        emailText =
-          "Thank you for your order! It is currently being processed.";
         emailHtml = `<!DOCTYPE html>
           <html>
           <head>
@@ -177,7 +146,7 @@ export const sendOrderConfirmationEmail = async (
             </style>
           </head>
           <body>
-            <h1>Thank you for your order!</h1>
+            <>Your order is being processed.</p>
             <h2>Shipping Address</h2>
               <p>Address: ${address.street}, ${address.state}, ${address.zipCode}, ${address.country}</p>
             <h2>Order Details</h2>
@@ -189,8 +158,6 @@ export const sendOrderConfirmationEmail = async (
       case OrderStatus.Shipped:
         // Add CSS styling for shipped status
         emailSubject = "Order Confirmation - Shipped";
-        emailText =
-          "Thank you for your order! It has been shipped and is on its way to you.";
         emailHtml = `<!DOCTYPE html>
           <html>
           <head>
@@ -199,7 +166,7 @@ export const sendOrderConfirmationEmail = async (
             </style>
           </head>
           <body>
-            <h1>Thank you for your order!</h1>
+            <h1>Your order has been shipped!</h1>
             <h2>Shipping Address</h2>
               <p>Address: ${address.street}, ${address.state}, ${address.zipCode}, ${address.country}</p>
             <h2>Order Details</h2>
@@ -211,7 +178,6 @@ export const sendOrderConfirmationEmail = async (
       case OrderStatus.Delivered:
         // Add CSS styling for delivered status
         emailSubject = "Order Confirmation - Delivered";
-        emailText = "Thank you for your order! It has been delivered to you.";
         emailHtml = `<!DOCTYPE html>
           <html>
           <head>
@@ -220,7 +186,7 @@ export const sendOrderConfirmationEmail = async (
             </style>
           </head>
           <body>
-            <h1>Thank you for your order!</h1>
+            <h1>Your order has been delivered!</h1>
             <h2>Shipping Address</h2>
               <p>Address: ${address.street}, ${address.state}, ${address.zipCode}, ${address.country}</p>
             <h2>Order Details</h2>
@@ -232,7 +198,6 @@ export const sendOrderConfirmationEmail = async (
       case OrderStatus.Cancelled:
         // Add CSS styling for cancelled status
         emailSubject = "Order Confirmation - Cancelled";
-        emailText = "Thank you for your order! It has been cancelled.";
         emailHtml = `<!DOCTYPE html>
           <html>
           <head>
@@ -255,7 +220,6 @@ export const sendOrderConfirmationEmail = async (
       case OrderStatus.Returned:
         // Add CSS styling for returned status
         emailSubject = "Order Confirmation - Returned";
-        emailText = "Your order has been returned.";
         emailHtml = `<!DOCTYPE html>
           <html>
           <head>
@@ -279,7 +243,6 @@ export const sendOrderConfirmationEmail = async (
       case OrderStatus.Refunded:
         // Add CSS styling for refunded status
         emailSubject = "Order Confirmation - Refunded";
-        emailText = "Your order has been refunded.";
         emailHtml = `<!DOCTYPE html>
           <html>
           <head>
@@ -304,7 +267,6 @@ export const sendOrderConfirmationEmail = async (
       default:
         // Add default CSS styling for other order statuses
         emailSubject = "Order Confirmation";
-        emailText = "Thank you for your order!";
         emailHtml = `<!DOCTYPE html>
           <html>
           <head>
@@ -328,7 +290,6 @@ export const sendOrderConfirmationEmail = async (
       from: process.env.ADMIN_EMAIL_SRV,
       to: email,
       subject: emailSubject,
-      text: emailText,
       html: emailHtml,
     };
 
