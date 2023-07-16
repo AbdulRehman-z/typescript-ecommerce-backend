@@ -20,7 +20,7 @@ interface Query {
 const router = express.Router();
 
 router.get(
-  "/api/products/params",
+  "/api/products",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       let query: Partial<Query> = {};

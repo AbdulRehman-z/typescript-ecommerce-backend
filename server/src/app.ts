@@ -23,6 +23,7 @@ import { updateOrderStatusRouter } from "./admin/orders-management/order-status-
 import { getOrderRouter } from "./admin/orders-management/order-retrieve.router";
 import { getOrdersRouter } from "./admin/orders-management/order-list.router";
 import { salesRevenueRouter } from "./admin/sales-management/sales-revenue.router";
+import { totalOrdersRouter } from "./admin/sales-management/total-orders.router";
 dotenv.config();
 
 const app = express();
@@ -73,6 +74,7 @@ AdminRoutes
 app.use(updateOrderStatusRouter);
 app.use(getOrderRouter);
 app.use(getOrdersRouter);
+app.use(totalOrdersRouter);
 app.use(createProductRouter);
 app.use(updateProductRouter);
 app.use(salesRevenueRouter);

@@ -1,16 +1,16 @@
 import express, { Request, Response, NextFunction } from "express";
 import { Order, OrderStatus } from "../../models/Order";
 import {
-  NotAuthorizedError,
   currentUserMiddleware,
   requireAuthMiddleware,
+  NotAuthorizedError,
   BadRequestError,
 } from "../../common/src";
 
 const router = express.Router();
 
 router.get(
-  "/api/admin/orders/sales-revenue/:days",
+  "/api/admin/orders/total-orders/:days",
   currentUserMiddleware,
   requireAuthMiddleware,
   async (req: Request, res: Response, next: NextFunction) => {
@@ -32,7 +32,7 @@ router.get(
       const startDate = new Date();
       startDate.setDate(startDate.getDate() - parseInt(days, 10));
 
-      // Aggregate pipeline for total sales revenue by specified time period
+      // Aggregate pipeline for total orders by specified time period
       const result = await Order.aggregate([
         {
           $match: {
@@ -43,24 +43,24 @@ router.get(
         {
           $group: {
             _id: null,
-            totalRevenue: { $sum: "$totalPrice" },
+            totalOrders: { $sum: 1 },
           },
         },
         {
           $project: {
             _id: 0,
-            totalRevenue: 1,
+            totalOrders: 1,
           },
         },
       ]);
 
-      const totalRevenue = result.length > 0 ? result[0].totalRevenue : 0;
+      const totalOrders = result.length > 0 ? result[0].totalOrders : 0;
 
-      res.status(200).json({ totalRevenue });
+      res.status(200).json({ totalOrders });
     } catch (error) {
       next(error);
     }
   }
 );
 
-export { router as salesRevenueRouter };
+export { router as totalOrdersRouter };
