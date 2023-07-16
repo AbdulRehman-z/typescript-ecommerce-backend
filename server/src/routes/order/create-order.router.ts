@@ -39,32 +39,30 @@ router.post(
         await Promise.all(
           // loop through all products in the cart
           products!.map(async (product) => {
-            const productToUpdate = await Product.findById(product.productId);
+            const productInDb = await Product.findById(product.productId);
 
             // if product is not found, throw an error
-            if (!productToUpdate) {
+            if (!productInDb) {
               throw new NotFoundError("Product not found");
             }
 
             // calculate the total price of the product with respect to quantity and then push it to the prices array
-            const calcPrice =
-              parseInt(productToUpdate.price) * product.quantity;
+            const calcPrice = parseInt(productInDb.price) * product.quantity;
             prices.push(calcPrice);
 
             // set the required fields on the product doc
-            productToUpdate.set({
+            productInDb.set({
               reservedQuantity:
-                productToUpdate.reservedQuantity! - product.quantity,
-              inStock: productToUpdate.inStock! - product.quantity,
+                productInDb.reservedQuantity! - product.quantity,
             });
 
             // push the product to the fetchedProducts array, so that we can use it later to send the order confirmation email
             fetchedProducts.push({
-              productToUpdate,
+              productInDb,
               quantity: product.quantity,
             });
 
-            await productToUpdate.save();
+            await productInDb.save();
           })
         );
 

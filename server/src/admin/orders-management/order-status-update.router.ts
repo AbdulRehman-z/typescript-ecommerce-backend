@@ -71,6 +71,25 @@ router.put(
           throw new NotFoundError("Cart not found");
         }
 
+        // update the inStock and totalSales fields of the products in the order
+        const products = cart.products;
+
+        await Promise.all(
+          products.map(async (product) => {
+            const productInDb = await Product.findById(product.productId);
+            if (!productInDb) {
+              throw new NotFoundError("Product not found");
+            }
+
+            productInDb.set({
+              inStock: productInDb.inStock! - product.quantity,
+              totalSales: productInDb.totalSales! + product.quantity,
+            });
+
+            await productInDb.save();
+          })
+        );
+
         if (cart.expired !== true) {
           order.set({
             status,

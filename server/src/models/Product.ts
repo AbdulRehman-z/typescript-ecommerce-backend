@@ -3,6 +3,7 @@ import { FlashSale, ProductAttrs } from "../types/types";
 
 export interface ProductDoc extends mongoose.Document {
   available: boolean;
+  totalSales: number;
   title: string;
   img: string;
   description: string;
@@ -25,6 +26,7 @@ interface ProductModel extends mongoose.Model<ProductDoc> {
 const ProductSchema = new mongoose.Schema(
   {
     available: { type: Boolean, default: true },
+    totalSales: { type: Number, default: 0 },
     title: { type: String, required: true },
     img: { type: String, required: true },
     description: { type: String, required: true },
