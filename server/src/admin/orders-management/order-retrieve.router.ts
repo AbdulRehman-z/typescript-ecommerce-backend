@@ -36,3 +36,5 @@ router.get(
     }
   }
 );
+
+export { router as getOrderRouter };

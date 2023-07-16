@@ -67,3 +67,5 @@ router.get(
     }
   }
 );
+
+export { router as salesRevenueRouter };
