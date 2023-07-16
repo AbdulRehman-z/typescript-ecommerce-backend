@@ -175,6 +175,7 @@ router.put(
               avaliableQuantity:
                 productInDb.avaliableQuantity! + product.quantity,
               inStock: productInDb.inStock + product.quantity,
+              totalSales: productInDb.totalSales! - product.quantity,
             });
             await productInDb.save();
           })
@@ -230,6 +231,7 @@ router.put(
               avaliableQuantity:
                 productInDb.avaliableQuantity! + product.quantity,
               inStock: productInDb.inStock + product.quantity,
+              totalSales: productInDb.totalSales! - product.quantity,
             });
 
             await productInDb.save();
