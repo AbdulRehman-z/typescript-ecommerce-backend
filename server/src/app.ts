@@ -25,6 +25,8 @@ import { getOrdersRouter } from "./admin/orders-management/order-list.router";
 import { salesRevenueRouter } from "./admin/sales-management/sales-revenue.router";
 import { totalOrdersRouter } from "./admin/sales-management/total-orders.router";
 import { topSellingProductsRouter } from "./admin/sales-management/top-selling-products.router";
+import { addToWishlistRouter } from "./routes/wishlist/add-wishlist.router";
+import { removeWishlistRouter } from "./routes/wishlist/remove-wislist.router";
 dotenv.config();
 
 const app = express();
@@ -68,6 +70,12 @@ app.use(deleteCartItemRouter);
 OrderRoutes
 **/
 app.use(createOrderRouter);
+
+/*
+WislistRoutes
+**/
+app.use(addToWishlistRouter);
+app.use(removeWishlistRouter);
 
 /*
 AdminRoutes
