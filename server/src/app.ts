@@ -21,13 +21,14 @@ import { createOrderRouter } from "./routes/order/create-order.router";
 import { ExpressAdapter } from "@bull-board/express";
 import { updateOrderStatusRouter } from "./admin/orders-management/order-status-update.router";
 import { getOrderRouter } from "./admin/orders-management/order-retrieve.router";
-import { getOrdersRouter } from "./admin/orders-management/order-list.router";
+// import { getOrdersRouter } from "./admin/orders-management/order-list.router";
 import { salesRevenueRouter } from "./admin/sales-management/sales-revenue.router";
 import { totalOrdersRouter } from "./admin/sales-management/total-orders.router";
 import { topSellingProductsRouter } from "./admin/sales-management/top-selling-products.router";
 import { addToWishlistRouter } from "./routes/wishlist/add-wishlist.router";
 import { removeWishlistRouter } from "./routes/wishlist/remove-wislist.router";
 import { orderActionsRouter } from "./routes/order/actions-order.router";
+import { getSpecificOrdersRouter } from "./admin/orders-management/orders-by-actions.router";
 dotenv.config();
 
 const app = express();
@@ -71,6 +72,7 @@ app.use(deleteCartItemRouter);
 OrderRoutes
 **/
 app.use(createOrderRouter);
+app.use(orderActionsRouter);
 
 /*
 WislistRoutes
@@ -83,13 +85,13 @@ AdminRoutes
 **/
 app.use(updateOrderStatusRouter);
 app.use(getOrderRouter);
-app.use(getOrdersRouter);
+// app.use(getOrdersRouter);
 app.use(totalOrdersRouter);
 app.use(createProductRouter);
 app.use(updateProductRouter);
 app.use(salesRevenueRouter);
 app.use(topSellingProductsRouter);
-app.use(orderActionsRouter);
+app.use(getSpecificOrdersRouter);
 
 /*
 BullBoard Routes
