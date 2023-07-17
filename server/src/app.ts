@@ -27,6 +27,7 @@ import { totalOrdersRouter } from "./admin/sales-management/total-orders.router"
 import { topSellingProductsRouter } from "./admin/sales-management/top-selling-products.router";
 import { addToWishlistRouter } from "./routes/wishlist/add-wishlist.router";
 import { removeWishlistRouter } from "./routes/wishlist/remove-wislist.router";
+import { orderActionsRouter } from "./routes/order/actions-order.router";
 dotenv.config();
 
 const app = express();
@@ -88,6 +89,7 @@ app.use(createProductRouter);
 app.use(updateProductRouter);
 app.use(salesRevenueRouter);
 app.use(topSellingProductsRouter);
+app.use(orderActionsRouter);
 
 /*
 BullBoard Routes

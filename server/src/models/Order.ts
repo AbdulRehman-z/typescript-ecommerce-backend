@@ -5,6 +5,10 @@ export interface OrderDoc extends mongoose.Document {
   userId: string;
   cartId: string;
   totalPrice: number;
+  refundRequest: boolean;
+  refunded: boolean;
+  cancelRequested: boolean;
+  cancelled: boolean;
   address: Object;
   status: OrderStatus;
 }
@@ -38,6 +42,22 @@ const OrderSchema = new mongoose.Schema(
       type: String,
       default: "pending",
       enum: Object.values(OrderStatus),
+    },
+    refundRequested: {
+      type: Boolean,
+      default: false,
+    },
+    refunded: {
+      type: Boolean,
+      default: false,
+    },
+    cancelRequested: {
+      type: Boolean,
+      default: false,
+    },
+    cancelled: {
+      type: Boolean,
+      default: false,
     },
   },
   {

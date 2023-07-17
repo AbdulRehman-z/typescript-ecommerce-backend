@@ -172,6 +172,8 @@ router.put(
               throw new NotFoundError("Product not found");
             }
             productInDb.set({
+              cancelled: true,
+              canceledRequested: false,
               avaliableQuantity:
                 productInDb.avaliableQuantity! + product.quantity,
               inStock: productInDb.inStock + product.quantity,
@@ -228,6 +230,8 @@ router.put(
             }
 
             productInDb.set({
+              refundRequested: false,
+              refunded: true,
               avaliableQuantity:
                 productInDb.avaliableQuantity! + product.quantity,
               inStock: productInDb.inStock + product.quantity,

@@ -5,10 +5,6 @@ import {
   currentUserMiddleware,
   requireAuthMiddleware,
 } from "../../common/src";
-import { Cart } from "../../models/Cart";
-import { sendOrderConfirmationEmail } from "../../services/email.service";
-import { expirationQueue } from "../../services/expiration-queue.service";
-import { Product } from "../../models/Product";
 import { Order } from "../../models/Order";
 
 const router = express.Router();
@@ -27,6 +23,10 @@ router.post(
           throw new NotFoundError("Order not found");
         }
 
+        if (order.status !== "delivered") {
+          throw new BadRequestError("Order is not delivered yet");
+        }
+
         order.set({ refundRequested: true });
         await order.save();
         return res.status(200).send({ message: "Refund requested" });
@@ -40,6 +40,19 @@ router.post(
           throw new NotFoundError("Order not found");
         }
 
+        // if order is shipped
+        if (order.status === "shipped") {
+          throw new BadRequestError(
+            "Can't cancel order now! Order is shipped. Please request refund"
+          );
+        }
+
+        // if order is delivered
+        if (order.status === "delivered") {
+          throw new BadRequestError(
+            "Can't cancel order now! Order is delivered. Please request refund"
+          );
+        }
         order.set({ cancelRequested: true });
         await order.save();
         return res.status(200).send({ message: "Cancel requested" });
@@ -49,3 +62,5 @@ router.post(
     }
   }
 );
+
+export { router as orderActionsRouter };
