@@ -16,7 +16,7 @@ export interface ProductDoc extends mongoose.Document {
   avaliableQuantity: number;
   flashSale: FlashSale;
   reservedQuantity?: number;
-  rating: Array<number>;
+  ratings: Array<number>;
 }
 
 interface ProductModel extends mongoose.Model<ProductDoc> {
@@ -47,7 +47,7 @@ const ProductSchema = new mongoose.Schema(
       endDate: { type: Date, default: undefined },
     },
     reservedQuantity: { type: Number, default: 0 },
-    rating: {
+    ratings: {
       type: Array,
       default: [],
     },

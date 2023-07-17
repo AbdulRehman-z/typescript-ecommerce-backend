@@ -37,11 +37,12 @@ router.get(
         {
           $match: {
             createdAt: { $gte: startDate },
+            totalSales: { $gte: 1 },
           },
         },
         {
           $group: {
-            _id: "$name",
+            _id: "$title",
             totalSaled: { $sum: "$totalSales" },
           },
         },
@@ -70,3 +71,5 @@ router.get(
     }
   }
 );
+
+export { router as topSellingProductsRouter };

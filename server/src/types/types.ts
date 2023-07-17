@@ -47,7 +47,7 @@ export interface ProductAttrs {
   avaliableQuantity: number;
   flashSale: FlashSale;
   reservedQuantity?: number;
-  rating?: Array<number>;
+  ratings?: Array<number>;
 }
 
 export interface Address {

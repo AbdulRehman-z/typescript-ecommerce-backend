@@ -96,15 +96,21 @@ router.post(
           fetchedCart?.save(),
           order.save(),
           updatedUser?.save(),
+          sendOrderConfirmationEmail(
+            req.currentUser?.email!,
+            req.currentUser?.address!,
+            order,
+            fetchedProducts
+          ),
         ]);
 
         // send the order confirmation email
-        await sendOrderConfirmationEmail(
-          req.currentUser?.email!,
-          req.currentUser?.address!,
-          order,
-          fetchedProducts
-        );
+        // await sendOrderConfirmationEmail(
+        //   req.currentUser?.email!,
+        //   req.currentUser?.address!,
+        //   order,
+        //   fetchedProducts
+        // );
         res.status(201).send(order);
       }
     } catch (error) {

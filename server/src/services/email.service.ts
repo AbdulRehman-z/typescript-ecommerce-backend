@@ -41,6 +41,7 @@ export const sendOrderConfirmationEmail = async (
   products?: ProductDoc[]
 ) => {
   try {
+    console.log("Products:", products);
     // Create a transporter for sending emails
     const transporter = nodemailer.createTransport({
       service: "gmail",
@@ -119,11 +120,11 @@ export const sendOrderConfirmationEmail = async (
               ${products?.map((product: any) => {
                 return `
                 <tr>
-                  <td>${product.productToUpdate.title}</td>
+                  <td>${product.productInDb.title}</td>
                   <td>${product.quantity}</td>
-                  <td>${product.quantity} X ${
-                  product.productToUpdate.price
-                } = ${product.quantity * product.productToUpdate.price}</td>
+                  <td>${product.quantity} X ${product.productInDb.price} = ${
+                  product.quantity * product.productInDb.price
+                }</td>
                 </tr>`;
               })}
             </table>

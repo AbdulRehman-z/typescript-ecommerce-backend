@@ -53,29 +53,84 @@ router.post(
         inStock,
       } = req.body;
 
-      // check if product already exists or not
-      const isProductExist = await Product.findOne({ title });
-      if (isProductExist) {
-        throw new BadRequestError("Product already exists");
+      // add 1000 products to the database based on the faker library and the product model
+
+      //  available?: boolean;
+      //   title: string;
+      //   img: string;
+      //   description: string;
+      //   category: string;
+      //   sizes: Array<string>;
+      //   gender: string;
+      //   inStock: number;
+      //   color: Array<string>;
+      //   price: string;
+      //   avaliableQuantity: number;
+      //   flashSale: FlashSale;
+      //   reservedQuantity?: number;
+      //   rating?: Array<number>;
+
+      // active: boolean;
+      //   discount: number;
+      //   startDate: Date | undefined;
+      //   endDate: Date | undefined;
+
+      for (let i = 0; i < 1000; i++) {
+        // generate random number between 100 and 1000
+        const randomNumber = faker.datatype.number({ min: 100, max: 1000 });
+
+        // generate random numbers between 0 and 5 and push it to the rating array
+        const ratingArray = [];
+        for (let i = 0; i < 5; i++) {
+          ratingArray.push(faker.datatype.number({ min: 0, max: 5 }));
+        }
+
+        const newProduct = Product.build({
+          title: faker.commerce.productName(),
+          img: faker.image.url(),
+          description: faker.commerce.productDescription(),
+          category: faker.commerce.department(),
+          sizes: ["S", "M", "L", "XL"],
+          gender: faker.person.sex(),
+          inStock: randomNumber,
+          color: ["red", "blue", "green", "yellow"],
+          price: faker.commerce.price(),
+          avaliableQuantity: randomNumber,
+          flashSale: {
+            active: false,
+            discount: 0,
+            startDate: undefined,
+            endDate: undefined,
+          },
+          ratings: ratingArray,
+        });
+
+        await newProduct.save();
       }
 
-      // //create new product
-      const newProduct = Product.build({
-        title,
-        price,
-        img,
-        category,
-        description,
-        sizes,
-        color,
-        avaliableQuantity,
-        flashSale,
-        gender,
-        inStock,
-      });
+      // // check if product already exists or not
+      // const isProductExist = await Product.findOne({ title });
+      // if (isProductExist) {
+      //   throw new BadRequestError("Product already exists");
+      // }
 
-      // save the product in the db
-      await newProduct.save();
+      // // //create new product
+      // const newProduct = Product.build({
+      //   title,
+      //   price,
+      //   img,
+      //   category,
+      //   description,
+      //   sizes,
+      //   color,
+      //   avaliableQuantity,
+      //   flashSale,
+      //   gender,
+      //   inStock,
+      // });
+
+      // // save the product in the db
+      // await newProduct.save();
 
       res.status(201).json({ message: "Product created successfully" });
     } catch (error) {

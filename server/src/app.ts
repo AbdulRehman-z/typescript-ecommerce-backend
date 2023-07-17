@@ -24,6 +24,7 @@ import { getOrderRouter } from "./admin/orders-management/order-retrieve.router"
 import { getOrdersRouter } from "./admin/orders-management/order-list.router";
 import { salesRevenueRouter } from "./admin/sales-management/sales-revenue.router";
 import { totalOrdersRouter } from "./admin/sales-management/total-orders.router";
+import { topSellingProductsRouter } from "./admin/sales-management/top-selling-products.router";
 dotenv.config();
 
 const app = express();
@@ -78,6 +79,7 @@ app.use(totalOrdersRouter);
 app.use(createProductRouter);
 app.use(updateProductRouter);
 app.use(salesRevenueRouter);
+app.use(topSellingProductsRouter);
 
 /*
 BullBoard Routes
