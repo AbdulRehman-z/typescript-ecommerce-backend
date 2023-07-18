@@ -1,6 +1,6 @@
 import express, { NextFunction, Request, Response } from "express";
 import { Order, OrderStatus } from "../../models/Order";
-import { Product, ProductDoc } from "../../models/Product";
+import { Product } from "../../models/Product";
 import { User } from "../../models/User";
 import {
   currentUserMiddleware,

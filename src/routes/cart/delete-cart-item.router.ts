@@ -12,7 +12,7 @@ router.delete(
   "/api/cart/remove-item",
   currentUserMiddleware,
   requireAuthMiddleware,
-  async (req, res, next) => {
+  async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { productId } = req.body;
 

@@ -1,5 +1,4 @@
 import express, { Request, Response, NextFunction } from "express";
-import { Order } from "../../models/Order";
 import { Product } from "../../models/Product";
 import {
   currentUserMiddleware,
@@ -64,8 +63,6 @@ router.get(
       ]);
 
       res.status(200).send(products);
-
-      //   res.status(200).send(topSellingProducts);
     } catch (error) {
       next(error);
     }

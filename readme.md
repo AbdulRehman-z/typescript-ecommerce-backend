@@ -111,3 +111,9 @@ We have also integrated Bull Board for managing background jobs and real-time no
 ## Contributing
 
 We welcome contributions to our e-commerce platform! If you have any suggestions, bug reports, or feature requests, please open an issue or submit a pull request.
+
+## Note
+
+Please be aware that this is a backend-only project, and no payment gateway has been implemented. The focus is on providing a solid foundation for an e-commerce platform, allowing users to manage products, carts, orders, and more. You will need to integrate a payment gateway separately if you plan to use this project for a complete e-commerce application.
+
+Thank you for checking out our E-commerce Platform! We hope it proves to be a useful and feature-rich foundation for your e-commerce projects. Happy coding!
